@@ -1,0 +1,13 @@
+{
+    "sections": {
+        "product-byob": {
+            "type": "product-byob",
+            "settings": {
+                "title": "Customize your own"
+            }
+        }
+    },
+    "order": [
+        "product-byob"
+    ]
+}
