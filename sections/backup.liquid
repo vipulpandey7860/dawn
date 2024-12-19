@@ -206,7 +206,9 @@
                 <div class="collection-products-container-header">
                   <p>(6 Products)</p>
                 </div>
-                <div class="collection-products-container">loading...</div>
+                <div class="collection-products-container">
+                  loading...
+                </div>
               </div>
             </div>
           </div>
@@ -271,7 +273,9 @@
           </div>
 
           <div class="side-cart-product-container">
-            <div class="side-cart-products">Cart empty</div>
+            <div class="side-cart-products">
+            Cart empty
+            </div>
           </div>
 
           <div class="side-cart-checkout">
@@ -307,35 +311,27 @@ const shop_money_format = '{{ shop.money_format }}';
 
 // Add this right after the shop_money_format constant declaration
 if (!window.config) {
-  window.config = {};
+  window.config = {
+    products: [],
+    collections: [],
+    collectionProducts: {}
+  };
 }
-window.config.products = [];
 
 window.config.collectionProducts = {
   {%- for collection in collections -%}
-    "{{ collection.id }}": [
+    "{{ collection.id | replace: 'gid://shopify/Collection/', '' }}": [
       {%- for product in collection.products -%}
         {
-          "id": {{ product.id | json }},
+          "id": "{{ product.id }}",
+          "clean_id": {{ product.id | json }},
           "title": {{ product.title | json }},
           "price": {{ product.price }},
           "featured_image": {{ product.featured_image | img_url: 'medium' | json }},
           "url": {{ product.url | json }},
           "has_only_default_variant": {{ product.has_only_default_variant | json }},
           "options": {{ product.options_with_values | json }},
-          "variants": [
-            {%- for variant in product.variants -%}
-              {
-                "id": {{ variant.id | json }},
-                "title": {{ variant.title | json }},
-                "price": {{ variant.price }},
-                "available": {{ variant.available | json }},
-                "featured_image": {{ variant.featured_image | default: product.featured_image | img_url: 'medium' | json }},
-                "options": {{ variant.options | json }}
-              }
-              {%- unless forloop.last -%},{%- endunless -%}
-            {%- endfor -%}
-          ]
+          "variants": {{ product.variants | json }}
         }
         {%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
@@ -350,7 +346,7 @@ window.config.products = Object.values(window.config.collectionProducts)
   .map(product => ({
     ...product,
     id: String(product.id),
-    variants: product.variants || []
+    clean_id: String(product.clean_id)
   }));
 
 // Add this after window.config initialization
@@ -411,11 +407,51 @@ function  fetchProductsFromDatabase(){
               "bundle": 
               [
   {
-    "id": 1734634564846,
+    "id": 1734614437127,
     "productCondition": "any",
-    "productConditionNumber": "4",
+    "productConditionNumber": "1",
     "productSelectionType": "collection",
-    "selectedProducts": [],
+    "selectedProducts": [
+      {
+        "id": "gid://shopify/Product/9582676869427",
+        "title": "Stitch Print Josette Dress",
+        "handle": "stitch-print-josette-dress",
+        "image": {
+          "id": "gid://shopify/ProductImage/47762198659379",
+          "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/STITCHPRINTJOSETTEDRESS_BLACK_0103.webp?v=1734070477"
+        }
+      },
+      {
+        "id": "gid://shopify/Product/9582677131571",
+        "title": "Striped Poncho",
+        "handle": "striped-poncho",
+        "image": {
+          "id": "gid://shopify/ProductImage/47762204361011",
+          "altText": "Striped Poncho in Golden Brown Stripe",
+          "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/STRIPEDPONCHO_GOLDENBROWNSTRIPE_1.webp?v=1734070507"
+        }
+      },
+      {
+        "id": "gid://shopify/Product/9582674575667",
+        "title": "Summer Romper",
+        "handle": "summer-romper",
+        "image": {
+          "id": "gid://shopify/ProductImage/47762090623283",
+          "altText": "Summer Romper Heather Grey",
+          "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/SUMMERROMPER_HEATHERGREY_4434.webp?v=1734069855"
+        }
+      },
+      {
+        "id": "gid://shopify/Product/9582675984691",
+        "title": "Sun Birds Cali Hoodie",
+        "handle": "wvn-for-you-x-art-by-ocha-sun-birds-cali-hoodie",
+        "image": {
+          "id": "gid://shopify/ProductImage/47762176377139",
+          "altText": "WVN For You x Art By Ocha Sun Birds Cali Hoodie in Black",
+          "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/SUNBIRDSCALIHOODIE_BLACK_1.webp?v=1734070354"
+        }
+      }
+    ],
     "selectedCollection": {
       "id": "gid://shopify/Collection/486469304627",
       "title": "test",
@@ -424,35 +460,16 @@ function  fetchProductsFromDatabase(){
     "chooseEachItemOnce": false
   },
   {
-    "id": 1734637506417,
+    "id": 1734616660251,
     "productCondition": "any",
     "productConditionNumber": "1",
     "productSelectionType": "collection",
     "selectedProducts": [],
     "selectedCollection": {
-      "id": "gid://shopify/Collection/486472515891",
-      "title": "hello",
-      "productsCount": 4
+      "id": "gid://shopify/Collection/486131237171",
+      "title": "Home page",
+      "productsCount": 2
     },
-    "chooseEachItemOnce": false
-  },
-  {
-    "id": 1734637847573,
-    "productCondition": "any",
-    "productConditionNumber": "1",
-    "productSelectionType": "product",
-    "selectedProducts": [
-      {
-        "id": "gid://shopify/Product/9582792704307",
-        "title": "Gift Box",
-        "handle": "gift-box",
-        "image": {
-          "id": "gid://shopify/ProductImage/47765322727731",
-          "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/gbb_gift_box.gif?v=1734088793"
-        }
-      }
-    ],
-    "selectedCollection": null,
     "chooseEachItemOnce": false
   }
 ]
@@ -500,22 +517,6 @@ function extractProductDetailsFromBundle(data) {
   }
 }
 
-function attachCollectionLinkListeners() {
-  const collectionLinks = document.querySelectorAll('.collection-link');
-  collectionLinks.forEach(link => {
-    link.addEventListener('click', function() {
-      const collectionId = this.dataset.collectionId;
-      // Clean the collection ID for use in selector
-      const cleanId = collectionId.replace('gid://shopify/Collection/', '');
-      const collectionSection = document.querySelector(`#collection-${cleanId}`);
-      
-      if (collectionSection) {
-        collectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
-}
-
 async function handleBundleData(bundleDetails) {
   try {
     const mainWrapper = document.querySelector('.main-wrapper');
@@ -551,13 +552,13 @@ async function handleBundleData(bundleDetails) {
     if (bundleDetails.collections.length > 0) {
       bundleDetails.collections.forEach((collection, index) => {
         mainWrapper.innerHTML += `
-            <div class="collection-section" id="collection-${collection.id.replace('gid://shopify/Collection/', '')}">
-              <h3 class="section-title"> Select from collection ${collection.title}</h3>
-              <div class="collection-products-container">
-                Loading collection products...
-            </div>
-          </div>
-        `;
+  <div class="collection-section" id="collection-${collection.id.replace('gid://shopify/Collection/', '')}">
+    <h3 class="section-title"> Select from collection ${collection.title}</h3>
+    <div class="collection-products-container">
+      Loading collection products...
+    </div>
+  </div>
+`;
       });
 
       // Render products for each collection
@@ -587,6 +588,39 @@ async function handleBundleData(bundleDetails) {
   } catch (error) {
     console.error('Error handling bundle data:', error);
   }
+}
+
+function attachCollectionTabListeners(bundleDetails) {
+  // Store collections data globally
+  window.config.collections = bundleDetails.collections;
+  
+  const tabLinks = document.querySelectorAll('.tab-link-item');
+  tabLinks.forEach(tab => {
+    tab.addEventListener('click', function() {
+      // Remove active class from all tabs
+      tabLinks.forEach(t => t.classList.remove('active'));
+      // Add active class to clicked tab
+      this.classList.add('active');
+      
+      const collectionId = this.dataset.collectionId;
+      const collection = window.config.collections.find(c => c.id === collectionId);
+      
+      if (collection) {
+        // Update products count in header
+        const productsCountElement = document.querySelector('.collection-products-container-header p');
+        if (productsCountElement) {
+          productsCountElement.textContent = `(${collection.productsCount} Products)`;
+        }
+
+        // Get collection handle from title
+        const collectionHandle = collection.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        const collectionProducts = window.config.collectionProducts[collectionHandle] || [];
+        
+        // Render products for this collection
+        renderProductItems(collectionProducts);
+      }
+    });
+  });
 }
 
 function updateBundleText(bundleDetails) {
@@ -651,40 +685,32 @@ function formatMoney(cents, format) {
 }
 
 async function fetchProductsDataFromShopify(products) {
-  if (!Array.isArray(products)) {
-    console.error('Expected array of products, received:', products);
-    return [];
-  }
-
   try {
     const productData = await Promise.all(
       products.map(async (item) => {
-        // Handle both product and collection items
-        const handle = item.handle;
-        if (!handle) {
-          console.error('Handle not found:', item);
-          return null;
-        }
-
+        const handle = item.handle || item.url.split('/products/')[1];
         try {
           const response = await fetch(`/products/${handle}.js`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           const data = await response.json();
+          
+          // Ensure we have the complete product data structure
           return {
             ...data,
-            featured_image: item.image?.originalSrc || item.image || data.featured_image
+            id: data.id,
+            title: data.title,
+            handle: data.handle,
+            featured_image: data.featured_image || item.image?.originalSrc || item.image,
+            price: data.price,
+            options: data.options || [],
+            variants: data.variants || [],
+            options_with_values: data.options_with_values || []
           };
         } catch (error) {
           console.error(`Error fetching product ${handle}:`, error);
-          return {
-            title: item.title,
-            handle: item.handle,
-            featured_image: item.image?.originalSrc || item.image,
-            price: 0,
-            id: item.id
-          };
+          return null;
         }
       })
     );
@@ -698,8 +724,12 @@ async function fetchProductsDataFromShopify(products) {
 
 function renderProductItems(productData, containerSelector = '.collection-products-container') {
   try {
-    // Store products in window.config object
-    window.config.products = productData;
+    // Store products in window.config
+    window.config.products = productData.map(product => ({
+      ...product,
+      id: String(product.id),
+      clean_id: String(product.clean_id || product.id.replace('gid://shopify/Product/', ''))
+    }));
     
     const productsContainer = document.querySelector(containerSelector);
     if (!productsContainer) {
@@ -708,8 +738,13 @@ function renderProductItems(productData, containerSelector = '.collection-produc
     }
     
     productsContainer.innerHTML = `
-        ${productData.map(product => `
-          <div class="product-card" data-product-id="${parseInt(product.id)}">
+      ${window.config.products.map(product => {
+        const hasVariants = product.variants && product.variants.length > 0;
+        const isMultipleVariants = hasVariants && product.variants.length > 1;
+        const displayId = product.clean_id || product.id.replace('gid://shopify/Product/', '');
+        
+        return `
+          <div class="product-card" data-product-id="${displayId}" data-has-variants="${hasVariants}">
             <div class="product-card-wrapper">
               <div class="product-card-image">
                 <img
@@ -731,21 +766,20 @@ function renderProductItems(productData, containerSelector = '.collection-produc
                   <div class="product-price">
                     <p>${formatMoney(product.price, shop_money_format)}</p>
                   </div>
-                  <div class="product-available-variants">
-                    <span></span>
-                    <span></span>
-                  </div>
                 </div>
               </div>
               
               <div class="product-card-cta">
                 <div class="add-to-bundle">
-                  <button>Add to Cart</button>
+                  <button class="variant-selector-trigger">
+                    ${isMultipleVariants ? 'Select Options' : 'Add to Cart'}
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        `).join('')}
+        `;
+      }).join('')}
     `;
 
     attachProductEventListeners();
@@ -754,262 +788,32 @@ function renderProductItems(productData, containerSelector = '.collection-produc
   }
 }
 
-function attachProductEventListeners() {
-  // Close button functionality
-  const closeButton = document.querySelector('.close-variant-selector button');
-  if (closeButton) {
-    closeButton.addEventListener('click', closeVariantSelector);
-  }
-
-  // Select variant button functionality
-  const selectVariantButton = document.querySelector('.product-variant-selector-cta button');
-  if (selectVariantButton) {
-    selectVariantButton.textContent = 'Add to Cart';
-    selectVariantButton.addEventListener('click', handleVariantSelection);
-  }
-
-  // Add to bundle buttons
-  document.querySelectorAll('.add-to-bundle button').forEach(button => {
-    button.addEventListener('click', function() {
-      const productCard = this.closest('.product-card');
-      if (productCard) {
-        addToCart(productCard);
-      }
-    });
-  });
-
-  // Variant selector popup
-  document.querySelectorAll('.product-available-variants').forEach(button => {
-    button.addEventListener('click', function(e) {
-      const productCard = this.closest('.product-card');
-      if (!productCard) return;
-
-      // Remove active state from all product cards
-      document.querySelectorAll('.product-card').forEach(card => {
-        card.removeAttribute('data-active');
-      });
-
-      // Set active state on current product card
-      productCard.setAttribute('data-active', 'true');
-
-      const productId = parseInt(productCard.dataset.productId);
-      
-      // First try to find product in main products array
-      let product = window.config.products.find(p => parseInt(p.id) === productId);
-      
-      // If not found, check collection products
-      if (!product) {
-        for (const collectionId in window.config.collectionProducts) {
-          const collectionProduct = window.config.collectionProducts[collectionId].find(
-            p => parseInt(p.id) === productId
-          );
-          if (collectionProduct) {
-            product = {
-              ...collectionProduct,
-              id: String(collectionProduct.id),
-              variants: collectionProduct.variants || []
-            };
-            break;
-          }
-        }
-      }
-
-      if (!product) {
-        console.error('Product not found:', productId);
-        return;
-      }
-
-      if (!product.variants || !product.options) {
-        console.error('Product variants or options not found');
-        return;
-      }
-
-      const variantPopup = document.querySelector('.product-variant-selector');
-      if (!variantPopup) return;
-
-      // Update product title
-      const productTitle = variantPopup.querySelector('.product-variant-selector-header h3');
-      if (productTitle) {
-        productTitle.textContent = product.title;
-      }
-
-      // Separate color and size options
-      const colorOption = product.options.find(option => 
-        option.name.toLowerCase().includes('color') || 
-        option.name.toLowerCase().includes('colour')
-      );
-      
-      const sizeOption = product.options.find(option => 
-        option.name.toLowerCase().includes('size')
-      );
-
-      // Update color variants if they exist
-      const colorContainer = variantPopup.querySelector('.color-items-container');
-      if (colorContainer && colorOption) {
-        colorContainer.innerHTML = colorOption.values.map(color => {
-          const isAvailable = product.variants.some(variant => {
-            const colorValue = variant.options[colorOption.position - 1];
-            return colorValue === color && variant.available;
-          });
-          
-          return `
-            <div class="pvsc-item ${!isAvailable ? 'disabled' : ''}" data-variant-value="${color}">
-              <div class="pvsc-item-image">
-                <div class="color-swatch" style="background-color: ${color.toLowerCase()}"></div>
-              </div>
-              <div class="color-title ${!isAvailable ? 'disabled' : ''}">
-                <p>${color}</p>
-              </div>
-            </div>
-          `;
-        }).join('');
-        
-        // Select first available color by default
-        const firstAvailableColor = colorContainer.querySelector('.pvsc-item:not(.disabled)');
-        if (firstAvailableColor) {
-          firstAvailableColor.classList.add('selected');
-        }
-        
-        variantPopup.querySelector('.product-variant-selector-colors').style.display = 'block';
-      } else {
-        variantPopup.querySelector('.product-variant-selector-colors').style.display = 'none';
-      }
-
-      // Update size variants if they exist
-      const sizeContainer = variantPopup.querySelector('.size-items-container');
-      if (sizeContainer && sizeOption) {
-        const selectedColor = colorContainer?.querySelector('.pvsc-item.selected')?.dataset.variantValue;
-        
-        sizeContainer.innerHTML = sizeOption.values.map(size => {
-          const isAvailable = product.variants.some(variant => {
-            const sizeValue = variant.options[sizeOption.position - 1];
-            const colorValue = selectedColor ? variant.options[colorOption.position - 1] : null;
-            return sizeValue === size && variant.available && 
-                   (!selectedColor || colorValue === selectedColor);
-          });
-          
-          return `
-            <div class="pvsc-item ${!isAvailable ? 'disabled' : ''}" data-variant-value="${size}">
-              <div class="size ${!isAvailable ? 'disabled' : ''}">
-                <p>${size}</p>
-              </div>
-            </div>
-          `;
-        }).join('');
-        
-        // Select first available size by default
-        const firstAvailableSize = sizeContainer.querySelector('.pvsc-item:not(.disabled)');
-        if (firstAvailableSize) {
-          firstAvailableSize.classList.add('selected');
-        }
-        
-        variantPopup.querySelector('.product-variant-selector-size').style.display = 'block';
-      } else {
-        variantPopup.querySelector('.product-variant-selector-size').style.display = 'none';
-      }
-
-      // Show the popup
-      variantPopup.classList.remove('closed');
-
-      // Handle variant selection
-      variantPopup.querySelectorAll('.pvsc-item:not(.disabled)').forEach(item => {
-        item.addEventListener('click', function() {
-          const container = this.closest('.pvsc-items-container');
-          container.querySelectorAll('.pvsc-item').forEach(i => 
-            i.classList.remove('selected')
-          );
-          this.classList.add('selected');
-          
-          // If this is a color selection, update available sizes
-          if (container.classList.contains('color-items-container')) {
-            updateAvailableSizes(product, this.dataset.variantValue);
-          }
-        });
-      });
-    });
-  });
-
-  // Helper function to update available sizes based on color selection
-  function updateAvailableSizes(product, selectedColor) {
-    const sizeContainer = document.querySelector('.size-items-container');
-    if (!sizeContainer) return;
-    
-    const sizeOption = product.options.find(option => 
-      option.name.toLowerCase().includes('size')
-    );
-    
-    if (!sizeOption) return;
-    
-    sizeContainer.querySelectorAll('.pvsc-item').forEach(sizeItem => {
-      const size = sizeItem.dataset.variantValue;
-      const isAvailable = product.variants.some(variant => 
-        variant.option_values.some(opt => opt.value === size && variant.available) &&
-        variant.option_values.some(opt => opt.value === selectedColor)
-      );
-      
-      sizeItem.classList.toggle('disabled', !isAvailable);
-      
-      // Update or add unavailable label
-      const existingLabel = sizeItem.querySelector('.unavailable-label');
-      if (!isAvailable && !existingLabel) {
-        sizeItem.querySelector('.size').insertAdjacentHTML('beforeend', '<span class="unavailable-label">Sold out</span>');
-      } else if (isAvailable && existingLabel) {
-        existingLabel.remove();
-      }
-    });
-    
-    // If current selected size is now unavailable, select first available size
-    const currentSelected = sizeContainer.querySelector('.selected');
-    if (currentSelected?.classList.contains('disabled')) {
-      currentSelected.classList.remove('selected');
-      const firstAvailable = sizeContainer.querySelector('.pvsc-item:not(.disabled)');
-      if (firstAvailable) {
-        firstAvailable.classList.add('selected');
-      }
-    }
-  }
-}
-
-function renderCollectionProductsVertical(collection) {
+function renderCollectionProducts(collections) {
   try {
-    const id = collection.id.replace('gid://shopify/Collection/', '');
-    const collectionProducts = window.config.collectionProducts[id] || [];
-    
-    // Add collection products to the main products array if they don't exist
-    collectionProducts.forEach(product => {
-      const formattedProduct = {
-        ...product,
-        id: String(product.id),
-        variants: product.variants || [],
-        options: product.options || [],
-        title: product.title || '',
-        price: product.price || 0,
-        featured_image: product.featured_image || ''
-      };
-      
-      const existingProductIndex = window.config.products.findIndex(p => p.id === formattedProduct.id);
-      if (existingProductIndex === -1) {
-        window.config.products.push(formattedProduct);
-      } else {
-        // Update existing product with collection data
-        window.config.products[existingProductIndex] = {
-          ...window.config.products[existingProductIndex],
-          ...formattedProduct
-        };
-      }
-    });
+    // Extract collection ID from the GID format
+    const collectionId = collections[0].id.split('/').pop();
+    const collectionTitle = collections[0].title;
 
-    const cleanId = collection.id.replace('gid://shopify/Collection/', '');
-    const productsContainer = document.querySelector(`#collection-${cleanId} .collection-products-container`);
+    // Find collection products by matching the collection title
+    // This assumes the collection title matches the handle in the pre-loaded data
+    const collectionHandle = collectionTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const collectionProducts = window.config.collectionProducts[collectionHandle] || [];
     
-    if (!productsContainer) {
-      console.error(`Container not found for collection: ${collection.title}`);
-      return;
+    // Store products in window.config object for later use
+    window.config.products = collectionProducts;
+    
+    const productsContainer = document.querySelector('.collection-products-container');
+    if (!productsContainer) return;
+    
+    // Update products count in header
+    const productsCountElement = document.querySelector('.collection-products-container-header p');
+    if (productsCountElement) {
+      productsCountElement.textContent = `(${collectionProducts.length} Products)`;
     }
     
     productsContainer.innerHTML = `
         ${collectionProducts.map(product => `
-          <div class="product-card" data-collection-id="${id}" data-product-id="${parseInt(product.id)}">
+          <div class="product-card" data-product-id="${product.id}">
             <div class="product-card-wrapper">
               <div class="product-card-image">
                 <img
@@ -1051,81 +855,177 @@ function renderCollectionProductsVertical(collection) {
     attachProductEventListeners();
   } catch (error) {
     console.error('Error rendering collection products:', error);
+    console.error('Collection:', collection);
   }
 }
 
-function closeVariantSelector() {
-  const variantPopup = document.querySelector('.product-variant-selector');
-  if (variantPopup) {
-    variantPopup.classList.add('closed');
-  }
+function attachProductEventListeners() {
+  console.log('Current window.config.products:', window.config.products); // Debug log
+
+  document.querySelectorAll('.add-to-bundle button').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      const productCard = this.closest('.product-card');
+      if (!productCard) return;
+      
+      const productId = String(productCard.dataset.productId);
+      const product = window.config.products.find(p => 
+        String(p.id) === productId || 
+        String(p.clean_id) === productId ||
+        String(p.id).replace('gid://shopify/Product/', '') === productId
+      );
+      
+      if (!product) {
+        console.error('Product not found:', productId);
+        return;
+      }
+
+      // If product has multiple variants, open the selector
+      if (product.variants && product.variants.length > 1) {
+        openVariantSelector(product, productCard);
+      } else if (product.variants && product.variants.length === 1) {
+        updateSideCart(product, product.variants[0]);
+      }
+    });
+  });
 }
 
-function handleVariantSelection() {
-  const variantPopup = document.querySelector('.product-variant-selector');
-  const productCard = document.querySelector('.product-card[data-active="true"]');
-  
-  if (!variantPopup || !productCard) return;
+function openVariantSelector(product, productCard) {
+  console.log('Opening variant selector with product:', product);
+  const variantSelector = document.querySelector('.product-variant-selector');
+  if (!variantSelector) return;
 
-  let product = null;  
-  const productId = productCard.dataset.productId;
-  const collectionId = productCard.dataset.collectionId;
-  if(collectionId){
-       product = window.config.collectionProducts[collectionId].find(p => parseInt(p.id)=== parseInt(productId))
-    }else{
-      product = window.config.products.find(p => parseInt(p.id) === parseInt(productId));
-    }
-  
-    if (!product) return;
-
-  // Get selected color and size
-  const selectedColor = variantPopup.querySelector('.color-items-container .pvsc-item.selected')?.dataset.variantValue;
-  const selectedSize = variantPopup.querySelector('.size-items-container .pvsc-item.selected')?.dataset.variantValue;
-  
-  // Find the matching variant
-  const selectedVariant = product.variants.find(variant => {
-    const colorOptionIndex = product.options.findIndex(opt => 
-      opt.name.toLowerCase().includes('color') || 
-      opt.name.toLowerCase().includes('colour')
-    );
-    
-    const sizeOptionIndex = product.options.findIndex(opt => 
-      opt.name.toLowerCase().includes('size')
-    );
-
-    const variantColor = colorOptionIndex !== -1 ? variant.options[colorOptionIndex] : null;
-    const variantSize = sizeOptionIndex !== -1 ? variant.options[sizeOptionIndex] : null;
-
-    const colorMatches = !selectedColor || variantColor === selectedColor;
-    const sizeMatches = !selectedSize || variantSize === selectedSize;
-
-    return colorMatches && sizeMatches && variant.available;
+  // Remove active state from all cards
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.removeAttribute('data-active');
   });
 
-  if (selectedVariant) {
-    // Add to cart directly
-    updateSideCart(product, selectedVariant);
+  // Set active state on current card
+  productCard.setAttribute('data-active', 'true');
+
+  // Update product title
+  const titleElement = variantSelector.querySelector('.product-variant-selector-header h3');
+  if (titleElement) {
+    titleElement.textContent = product.title;
   }
 
-  // Close the variant selector
-  closeVariantSelector();
+  // Check if product has options
+  if (!product.options_with_values || !product.variants) {
+    console.error('Fetching complete product data...');
+    // Fetch complete product data if missing
+    fetch(`/products/${product.handle}.js`)
+      .then(response => response.json())
+      .then(data => {
+        product.options_with_values = data.options_with_values;
+        product.variants = data.variants;
+        populateVariantOptions(product, variantSelector);
+      })
+      .catch(error => console.error('Error fetching product data:', error));
+  } else {
+    populateVariantOptions(product, variantSelector);
+  }
+
+  // Show the popup
+  variantSelector.classList.remove('closed');
+}
+
+function populateVariantOptions(product, variantSelector) {
+  const colorContainer = variantSelector.querySelector('.color-items-container');
+  const sizeContainer = variantSelector.querySelector('.size-items-container');
+  
+  // Clear existing options
+  if (colorContainer) colorContainer.innerHTML = '';
+  if (sizeContainer) sizeContainer.innerHTML = '';
+
+  // Get unique options
+  const options = product.options_with_values || [];
+  
+  options.forEach(option => {
+    const isColor = option.name.toLowerCase().includes('color') || option.name.toLowerCase().includes('colour');
+    const isSize = option.name.toLowerCase().includes('size');
+    
+    if (isColor && colorContainer) {
+      colorContainer.innerHTML = option.values.map(value => `
+        <div class="pvsc-item" data-value="${value}">
+          <div class="pvsc-item-image">
+            <div class="color-swatch" style="background-color: ${value.toLowerCase()}"></div>
+          </div>
+          <div class="pvsc-item-title">
+            <h4>${value}</h4>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    if (isSize && sizeContainer) {
+      sizeContainer.innerHTML = option.values.map(value => `
+        <div class="pvsc-item" data-value="${value}">
+          <div class="size">
+            <p>${value}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+  });
+
+  // Attach variant selection handlers
+  attachVariantSelectionHandlers(product);
+}
+
+function attachVariantSelectionHandlers(product) {
+  const variantSelector = document.querySelector('.product-variant-selector');
+  const selectVariantButton = variantSelector?.querySelector('.product-variant-selector-cta button');
+  
+  if (selectVariantButton) {
+    selectVariantButton.addEventListener('click', function() {
+      const selectedColor = variantSelector.querySelector('.color-items-container .pvsc-item.selected')?.dataset.value;
+      const selectedSize = variantSelector.querySelector('.size-items-container .pvsc-item.selected')?.dataset.value;
+      
+      // Find matching variant
+      const selectedVariant = product.variants.find(variant => 
+        (!selectedColor || variant.options.includes(selectedColor)) &&
+        (!selectedSize || variant.options.includes(selectedSize))
+      );
+
+      if (selectedVariant) {
+        const activeProductCard = document.querySelector('.product-card[data-active="true"]');
+        if (activeProductCard) {
+          updateSideCart(product, selectedVariant);
+          variantSelector.classList.add('closed');
+        }
+      } else {
+        console.error('No matching variant found');
+      }
+    });
+  }
+
+  // Add click handlers for color and size options
+  variantSelector?.querySelectorAll('.pvsc-item').forEach(item => {
+    item.addEventListener('click', function() {
+      const container = this.closest('.pvsc-items-container');
+      container.querySelectorAll('.pvsc-item').forEach(i => i.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
 }
 
 function addToCart(productCard) {
-  let product = null;
   const productId = productCard.dataset.productId;
-
-  const collectionId = productCard.dataset.collectionId;
-  if(collectionId){
-       product = window.config.collectionProducts[collectionId].find(p => parseInt(p.id)=== parseInt(productId))
-    }else{
-      product = window.config.products.find(p => parseInt(p.id) === parseInt(productId));
-    }
-
-   
+  // Clean the product ID by removing the Shopify GID prefix if present
+  const cleanProductId = productId.replace('gid://shopify/Product/', '');
+  const product = window.config.products.find(p => 
+    String(p.id) === String(cleanProductId) || 
+    String(p.id) === String(productId)
+  );
   
-  if (!product || !product.variants || !product.variants.length) {
-    console.error('Product or variants not found');
+  if (!product) {
+    console.error('Product not found:', productId);
+    return;
+  }
+
+  // Ensure variants exist
+  if (!product.variants || product.variants.length === 0) {
+    console.error('No variants found for product:', product.title);
     return;
   }
 
@@ -1135,27 +1035,31 @@ function addToCart(productCard) {
     return;
   }
 
-  // For products with multiple variants, always open variant selector
-  const variantDisplay = productCard.querySelector('.product-available-variants');
-  if (!variantDisplay) {
-    console.error('Variant display not found');
-    return;
+  // For products with multiple variants, open variant selector
+  const variantSelectorTrigger = productCard.querySelector('.variant-selector-trigger');
+  if (variantSelectorTrigger) {
+    variantSelectorTrigger.click();
   }
-
-  // Trigger variant selector popup
-  variantDisplay.click();
 }
 
 // Add this function to manage side cart state
 function updateSideCart(product, variant, quantity = 1) {
+  if (!window.sideCart) {
+    window.sideCart = {
+      items: [],
+      subtotal: 0,
+      discount: 0,
+      total: 0
+    };
+  }
+
   // Check if item already exists in cart
   const existingItemIndex = window.sideCart.items.findIndex(item => String(item.id) === String(variant.id));
   
   if (existingItemIndex !== -1) {
     // Update existing item
     const existingItem = window.sideCart.items[existingItemIndex];
-    const newQuantity = existingItem.quantity + quantity;
-    existingItem.quantity = newQuantity;
+    existingItem.quantity += quantity;
     window.sideCart.subtotal += variant.price * quantity;
   } else {
     // Create new cart item
@@ -1165,12 +1069,8 @@ function updateSideCart(product, variant, quantity = 1) {
       title: product.title,
       image: product.featured_image,
       variant: {
-        color: product.options.findIndex(opt => opt.name.toLowerCase().includes('color') || opt.name.toLowerCase().includes('colour')) !== -1 
-          ? variant.options[product.options.findIndex(opt => opt.name.toLowerCase().includes('color') || opt.name.toLowerCase().includes('colour'))] 
-          : null,
-        size: product.options.findIndex(opt => opt.name.toLowerCase().includes('size')) !== -1 
-          ? variant.options[product.options.findIndex(opt => opt.name.toLowerCase().includes('size'))] 
-          : null
+        title: variant.title,
+        options: variant.options || []
       },
       price: variant.price,
       quantity: quantity
@@ -1199,7 +1099,7 @@ function renderSideCart() {
   // Update cart count
   const addedProductsCount = document.querySelector('.added-products-count');
   if (addedProductsCount) {
-    addedProductsCount.textContent = window.sideCart.items.length;
+    addedProductsCount.textContent = document.querySelector('.added-products-count');
   }
 
   // Render cart items
@@ -1360,10 +1260,104 @@ function updateItemQuantity(variantId, newQuantity) {
   renderSideCart();
 }
 
+function renderCollectionProductsVertical(collection) {
+  try {
+    // Clean the collection ID for use in selector
+    const cleanId = collection.id.replace('gid://shopify/Collection/', '');
+    
+    // Find collection products by ID instead of title
+    const collectionProducts = window.config.collectionProducts[cleanId] || [];
+    
+    const productsContainer = document.querySelector(`#collection-${cleanId} .collection-products-container`);
+    if (!productsContainer) {
+      console.error(`Container not found for collection: ${collection.title}`);
+      return;
+    }
+    
+    // Log for debugging
+    console.log('Collection ID:', cleanId);
+    console.log('Collection Products:', collectionProducts);
+    
+    productsContainer.innerHTML = `
+        ${collectionProducts.map(product => `
+          <div class="product-card" data-product-id="${product.id}">
+            <div class="product-card-wrapper">
+              <div class="product-card-image">
+                <img
+                  src="${product.featured_image}"
+                  alt="${product.title}"
+                  width="100%"
+                  height="100%"
+                >
+              </div>
+
+              <div class="product-card-content">
+                <div class="product-card-top">
+                  <div class="product-title">
+                    <h4>${product.title}</h4>
+                  </div>
+                </div>
+
+                <div class="product-card-mid">
+                  <div class="product-price">
+                    <p>${formatMoney(product.price, shop_money_format)}</p>
+                  </div>
+                  <div class="product-available-variants">
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="product-card-cta">
+                <div class="add-to-bundle">
+                  <button>Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+    `;
+
+    attachProductEventListeners();
+  } catch (error) {
+    console.error('Error rendering collection products:', error);
+    console.error('Collection:', collection);
+  }
+}
+
+function attachCollectionLinkListeners() {
+  const collectionLinks = document.querySelectorAll('.collection-link');
+  collectionLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      const collectionId = this.dataset.collectionId;
+      // Clean the collection ID for use in selector
+      const cleanId = collectionId.replace('gid://shopify/Collection/', '');
+      const collectionSection = document.querySelector(`#collection-${cleanId}`);
+      
+      if (collectionSection) {
+        collectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+}
+
 // In your main initialization code
 document.addEventListener('DOMContentLoaded', function() {
   const bundleData = fetchProductsFromDatabase();
   const bundleDetails = extractProductDetailsFromBundle(bundleData);
   handleBundleData(bundleDetails);
+  
+  // Add close button functionality for variant selector
+  const closeVariantSelector = document.querySelector('.close-variant-selector button');
+  if (closeVariantSelector) {
+    closeVariantSelector.addEventListener('click', function() {
+      const variantSelector = document.querySelector('.product-variant-selector');
+      if (variantSelector) {
+        variantSelector.classList.add('closed');
+      }
+    });
+  }
 });
 </script>
+
