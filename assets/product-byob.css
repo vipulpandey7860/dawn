@@ -1009,6 +1009,16 @@ h6 {
   border: 1px solid #BEBEBE;
 }
 
+.quantity-controls.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.quantity-controls.disabled button,
+.quantity-controls.disabled input {
+  cursor: not-allowed;
+}
+
 
 @media (max-width: 1025px) {
   .tpdc-wrapper {
@@ -1109,4 +1119,10 @@ h6 {
   .side-cart-checkout-cta {
     margin-top: 24px;
   }
+}
+
+.quantity-btn:disabled,
+.quantity-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }

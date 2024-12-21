@@ -423,17 +423,17 @@ function  fetchProductsFromDatabase(){
     "bundleDescription": "grtf",
     "products": [],
     "isDiscountOptional": false,
-    "discountType": "tiered",
-    "discountValue": "",
+    "discountType": "percentage",
+    "discountValue": "88",
     "noDiscount": false,
     "media": [],
-    "conditions": "[{\"id\":1734634564846,\"productCondition\":\"any\",\"productConditionNumber\":\"4\",\"productSelectionType\":\"collection\",\"selectedProducts\":[],\"selectedCollection\":{\"id\":\"gid://shopify/Collection/486469304627\",\"title\":\"test\",\"productsCount\":5},\"chooseEachItemOnce\":false},{\"id\":1734637506417,\"productCondition\":\"any\",\"productConditionNumber\":\"1\",\"productSelectionType\":\"collection\",\"selectedProducts\":[],\"selectedCollection\":{\"id\":\"gid://shopify/Collection/486472515891\",\"title\":\"hello\",\"productsCount\":4},\"chooseEachItemOnce\":false},{\"id\":1734637847573,\"productCondition\":\"any\",\"productConditionNumber\":\"1\",\"productSelectionType\":\"product\",\"selectedProducts\":[{\"id\":\"gid://shopify/Product/9582677131571\",\"title\":\"Striped Poncho\",\"handle\":\"striped-poncho\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762204361011\",\"altText\":\"Striped Poncho in Golden Brown Stripe\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/STRIPEDPONCHO_GOLDENBROWNSTRIPE_1.webp?v=1734070507\"}}],\"selectedCollection\":null,\"chooseEachItemOnce\":false}]",
-    "tierBasedOn": "price",
-    "purchaseRequirement": "amount",
-    "tiers": "[{\"id\":1734726211591,\"condition\":\"any\",\"requirement\":\"5\",\"value\":\"10\"},{\"id\":1734726250553,\"condition\":\"any\",\"requirement\":\"6\",\"value\":\"20\"}]",
+    "conditions": "[{\"id\":1734634564846,\"productCondition\":\"any\",\"productConditionNumber\":\"4\",\"productSelectionType\":\"collection\",\"selectedProducts\":[],\"selectedCollection\":{\"id\":\"gid://shopify/Collection/486469304627\",\"title\":\"test\",\"productsCount\":5},\"chooseEachItemOnce\":false},{\"id\":1734637506417,\"productCondition\":\"any\",\"productConditionNumber\":\"1\",\"productSelectionType\":\"collection\",\"selectedProducts\":[],\"selectedCollection\":{\"id\":\"gid://shopify/Collection/486472515891\",\"title\":\"hello\",\"productsCount\":4},\"chooseEachItemOnce\":false},{\"id\":1734637847573,\"productCondition\":\"any\",\"productConditionNumber\":\"1\",\"productSelectionType\":\"product\",\"selectedProducts\":[{\"id\":\"gid://shopify/Product/9582674936115\",\"title\":\"About Time Dress\",\"handle\":\"about-time-dress\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762119360819\",\"altText\":\"About Time Dress in MANGO MOJITO STRIPE\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ABOUTTIMEDRESS_MANGOMOJITOSTRIPE_3262.webp?v=1734070024\"}},{\"id\":\"gid://shopify/Product/9582675493171\",\"title\":\"Afterglow James Tee\",\"handle\":\"afterglow-james-tee\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762160419123\",\"altText\":\"Front view of short sleeve shirt with a big golden sun graphic printed with low impact dyes\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/AFTERGLOWJAMESTEE_BIRCH_1.webp?v=1734070258\"}},{\"id\":\"gid://shopify/Product/9582677131571\",\"title\":\"Striped Poncho\",\"handle\":\"striped-poncho\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762204361011\",\"altText\":\"Striped Poncho in Golden Brown Stripe\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/STRIPEDPONCHO_GOLDENBROWNSTRIPE_1.webp?v=1734070507\"}}],\"selectedCollection\":null,\"chooseEachItemOnce\":false}]",
+    "tierBasedOn": "",
+    "purchaseRequirement": "",
+    "tiers": "[]",
     "productStatus": "active",
     "createdAt": "2024-12-19T12:08:28.430Z",
-    "updatedAt": "2024-12-20T20:32:06.389Z",
+    "updatedAt": "2024-12-20T21:02:22.772Z",
     "showStepper": true,
     "userId": "offline_byob-templates.myshopify.com"
 }
@@ -1484,6 +1484,57 @@ function updateCartTotals() {
   }
 }
 
+function isProductConditionMet(productId, conditions) {
+  if (!conditions || !window.sideCart) return false;
+
+  return conditions.some(condition => {
+    let isPartOfCondition = false;
+    let conditionMet = false;
+    let matchingItemsCount = 0;
+
+    // Check if product belongs to this condition
+    if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
+      const collectionProducts = window.config.collectionProducts[condition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
+      isPartOfCondition = collectionProducts.some(p => 
+        String(p.id).replace('gid://shopify/Product/', '') === String(productId).replace('gid://shopify/Product/', '')
+      );
+    } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
+      isPartOfCondition = condition.selectedProducts.some(p => 
+        String(p.id).replace('gid://shopify/Product/', '') === String(productId).replace('gid://shopify/Product/', '')
+      );
+    }
+
+    // If product is part of this condition, check if condition is met
+    if (isPartOfCondition) {
+      window.sideCart.items.forEach(cartItem => {
+        let isMatch = false;
+        const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
+
+        if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
+          const collectionProducts = window.config.collectionProducts[condition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
+          isMatch = collectionProducts.some(p => {
+            const cleanCollectionProductId = String(p.id).replace('gid://shopify/Product/', '');
+            return cleanCollectionProductId === cleanCartProductId;
+          });
+        } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
+          isMatch = condition.selectedProducts.some(p => {
+            const cleanSelectedProductId = String(p.id).replace('gid://shopify/Product/', '');
+            return cleanSelectedProductId === cleanCartProductId;
+          });
+        }
+
+        if (isMatch) {
+          matchingItemsCount += cartItem.quantity;
+        }
+      });
+
+      conditionMet = matchingItemsCount >= condition.productConditionNumber;
+    }
+
+    return isPartOfCondition && conditionMet;
+  });
+}
+
 function findApplicableTier(baseValue) {
   if (!window.discountConditions?.tiers || !Array.isArray(window.discountConditions.tiers)) {
     return null;
@@ -1524,12 +1575,13 @@ function attachQuantityListeners() {
       });
 
       // Prevent direct input changes
-      input.addEventListener('input', (e) => {
+      input.addEventListener('change', (e) => {
         e.preventDefault();
-        const cartItem = window.sideCart.items.find(item => String(item.id) === String(variantId));
-        if (cartItem) {
-          e.target.value = cartItem.quantity;
+        if (isMaxTierReached()) {
+          e.target.value = input.getAttribute('data-last-value') || e.target.value;
+          return false;
         }
+        updateItemQuantity(variantId, parseInt(e.target.value));
         return false;
       });
 
@@ -1541,11 +1593,27 @@ function attachQuantityListeners() {
 
       plusBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        if (isMaxTierReached()) return;
         const currentQty = parseInt(input.value);
         updateItemQuantity(variantId, currentQty + 1);
       });
+
+      // Store the current value for reference
+      input.setAttribute('data-last-value', input.value);
     }
   });
+}
+
+function isMaxTierReached() {
+  if (!window.discountConditions?.tiers || !window.sideCart?.items) return false;
+  
+  const cartItems = window.sideCart.items;
+  const baseValue = calculateTierBaseValue(cartItems);
+  const sortedTiers = [...window.discountConditions.tiers].sort((a, b) => b.threshold - a.threshold);
+  const maxTier = sortedTiers[0];
+  const currentTier = findApplicableTier(baseValue);
+  
+  return currentTier && currentTier.threshold === maxTier.threshold;
 }
 
 function updateItemQuantity(variantId, newQuantity) {
@@ -1704,22 +1772,32 @@ function updateTieredSteppers(tiers, stepperContainers, infoHeaders) {
   
   // Sort tiers by threshold in descending order
   const sortedTiers = [...tiers].sort((a, b) => b.threshold - a.threshold);
-  const maxTier = sortedTiers[0]; // Highest threshold tier
+  const maxTier = sortedTiers[0];
   const currentTier = findApplicableTier(baseValue);
   const nextTier = sortedTiers.find(tier => tier.threshold > baseValue);
   
   // Check if we've reached the maximum tier
   const isMaxTierReached = currentTier && currentTier.threshold === maxTier.threshold;
   
-  // Disable/enable add to cart buttons based on max tier
+  // Disable/enable add to cart buttons and quantity controls
   const addToCartButtons = document.querySelectorAll('.add-to-bundle button');
+  const quantityControls = document.querySelectorAll('.quantity-btn.plus');
+  const quantityInputs = document.querySelectorAll('.quantity-input');
+  
   addToCartButtons.forEach(button => {
+    button.disabled = isMaxTierReached;
+    button.classList.toggle('disabled', isMaxTierReached);
+  });
+
+  quantityControls.forEach(control => {
+    control.disabled = isMaxTierReached;
+    control.classList.toggle('disabled', isMaxTierReached);
+  });
+
+  quantityInputs.forEach(input => {
+    input.readOnly = isMaxTierReached;
     if (isMaxTierReached) {
-      button.disabled = true;
-      button.classList.add('disabled');
-    } else {
-      button.disabled = false;
-      button.classList.remove('disabled');
+      input.setAttribute('data-last-value', input.value);
     }
   });
 
@@ -1966,7 +2044,7 @@ function updateDiscountSteppers(conditions) {
         };
     });
 
-    // Disable buttons for completed conditions
+  // Disable buttons for completed conditions
     completedConditions.forEach(({ condition, completed }) => {
         if (completed) {
             if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
@@ -1988,6 +2066,43 @@ function updateDiscountSteppers(conditions) {
             }
         }
     });
+// Disable quantity controls for completed conditions
+completedConditions.forEach(({ condition, completed }) => {
+  if (completed) {
+    const cartItems = window.sideCart?.items || [];
+    cartItems.forEach(cartItem => {
+      const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
+      let isPartOfCondition = false;
+
+      if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
+        const collectionProducts = window.config.collectionProducts[condition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
+        isPartOfCondition = collectionProducts.some(p => {
+          const cleanCollectionProductId = String(p.id).replace('gid://shopify/Product/', '');
+          return cleanCollectionProductId === cleanCartProductId;
+        });
+      } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
+        isPartOfCondition = condition.selectedProducts.some(p => {
+          const cleanSelectedProductId = String(p.id).replace('gid://shopify/Product/', '');
+          return cleanSelectedProductId === cleanCartProductId;
+        });
+      }
+
+      if (isPartOfCondition) {
+        const quantityControl = document.querySelector(`[data-variant-id="${cartItem.id}"] .quantity-controls`);
+        if (quantityControl) {
+          const minusBtn = quantityControl.querySelector('.quantity-btn.minus');
+          const plusBtn = quantityControl.querySelector('.quantity-btn.plus');
+          const input = quantityControl.querySelector('.quantity-input');
+
+          plusBtn.disabled = true;
+          input.disabled = true;
+          quantityControl.classList.add('condition-met');
+        }
+      }
+    });
+  }
+});
+
 }
 
 
