@@ -227,8 +227,9 @@
             <div class="cart-head">
               <h3>Cart</h3>
             </div>
+            <div class="side-cart-toggler"></div>
             <div class="cart-totoal-added-products">
-              <p><span class="added-products-count">0</span> / <span class="total-products-count">0</span> products</p>
+              <p><span class="added-products-count">0</span>products</p>
             </div>
           </div>
 
@@ -436,7 +437,7 @@ function  fetchProductsFromDatabase(){
     "updatedAt": "2024-12-20T21:02:22.772Z",
     "showStepper": true,
     "userId": "offline_byob-templates.myshopify.com"
-}
+} 
       return resdata;
 }
 
@@ -1762,8 +1763,6 @@ function formatTierRemaining(tier, currentValue) {
     : `${remaining} ${remaining === 1 ? 'item' : 'items'}`;
 }
 
-
-
 function updateTieredSteppers(tiers, stepperContainers, infoHeaders) {
   if (!Array.isArray(tiers) || !stepperContainers) return;
   
@@ -1854,10 +1853,13 @@ function updateDiscountSteppers(conditions) {
     }
 
     //  const discountType = window.discountConditions.discountType === 'percentage' ? '%' : shop_money_format
+    const discountValueToDisplay = getDiscountText(window.discountConditions.discountType,window.discountConditions.discountValue)
      
-    //  const discountText = `Complete the following to get ${window.discountConditions.discountValue} ${discountType} off on your cart total`;
-    const discountText = getDiscountText(window.discountConditions.discountType,window.discountConditions.discountValue)
-     discountHeader.innerHTML = discountText;
+     const discountText = `Complete the following conditions to get ${discountValueToDisplay} off on your cart total`;
+    // const discountText = getDiscountText(window.discountConditions.discountType,window.discountConditions.discountValue)
+     discountHeader.innerHTML = `
+     <div class="discount-header-normal-condition">${discountText}</div>
+     `;
 
      // Check if all conditions are met
      const cartItems = window.sideCart?.items || [];
@@ -1996,15 +1998,15 @@ function updateDiscountSteppers(conditions) {
          conditions.forEach(product => {
              const stepItem = document.createElement('div');
              stepItem.classList.add('discount-stepper-item');
+            //  <p>${product.productCondition}</p>
              stepItem.innerHTML = `
                  <div class="discount-condition">
-                     <p>${product.productCondition}</p>
-                 </div>
                  <p>${product.productConditionNumber} product${product.productConditionNumber > 1 ? 's' : ''}</p>
+                 </div>
                  <div class="discount-value">
                      ${product.productSelectionType === 'collection' ? `
                          <p>From ${product.productSelectionType} ${product.selectedCollection.title}</p>
-                     ` : `<p>From ${product.productSelectionType} Products</p>`}
+                     ` : `<p>From ${product.productSelectionType}s</p>`}
                  </div>
              `;
              container.appendChild(stepItem);
@@ -2066,9 +2068,9 @@ function updateDiscountSteppers(conditions) {
             }
         }
     });
-// Disable quantity controls for completed conditions
-completedConditions.forEach(({ condition, completed }) => {
-  if (completed) {
+      // Disable quantity controls for completed conditions
+    completedConditions.forEach(({ condition, completed }) => {
+    if (completed) {
     const cartItems = window.sideCart?.items || [];
     cartItems.forEach(cartItem => {
       const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
@@ -2105,13 +2107,95 @@ completedConditions.forEach(({ condition, completed }) => {
 
 }
 
+  function sideCartRenderer() {
+    const sideCartContainer = document.querySelector('.side-cart-container');
+    const sideCartToggler = document.querySelector('.side-cart-toggler');
+    const mainContent = document.querySelector('.main-product-content-container');
+
+    if (!sideCartContainer || !sideCartToggler || !mainContent) {
+      console.warn('Required elements not found for sideCartRenderer');
+      return;
+    }
+
+    // Observer for main content position
+    const contentObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (window.innerWidth >= 1024) return;
+
+          const intersectionRatio = entry.intersectionRatio;
+
+          if (intersectionRatio >= 0.8) {
+            // When 80% or more is in viewport
+            requestAnimationFrame(() => {
+              sideCartContainer.classList.add('side-cart-shrink');
+            });
+          } else if (intersectionRatio <= 0.3) {
+            // When 70% or more is out of viewport
+            requestAnimationFrame(() => {
+              sideCartContainer.classList.remove('side-cart-shrink', 'side-cart-expand');
+            });
+          }
+        });
+      },
+      {
+        threshold: [0.3, 0.8], // Observe at 30% and 80% visibility thresholds
+      }
+    );
+
+    if (mainContent) {
+      contentObserver.observe(mainContent);
+    }
+
+    // Create mutation observer to watch for class changes
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          const currentClasses = sideCartContainer.classList;
+          if (currentClasses.contains('side-cart-shrink') && currentClasses.contains('side-cart-expand')) {
+            currentClasses.remove('side-cart-shrink');
+          }
+        }
+      });
+    });
+
+    mutationObserver.observe(sideCartContainer, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    // Toggle functionality
+    sideCartToggler.addEventListener('click', function () {
+      if (sideCartContainer.classList.contains('side-cart-shrink')) {
+        sideCartContainer.classList.remove('side-cart-shrink');
+        sideCartContainer.classList.add('side-cart-expand');
+      } else if (sideCartContainer.classList.contains('side-cart-expand')) {
+        sideCartContainer.classList.remove('side-cart-expand');
+        sideCartContainer.classList.add('side-cart-shrink');
+      }
+    });
+
+    // Handle resize
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (window.innerWidth >=1024) {
+        sideCartContainer.classList.remove('side-cart-shrink', 'side-cart-expand');
+      }
+    });
+
+    resizeObserver.observe(document.body);
+  }
 
 // In your main initialization code
 document.addEventListener('DOMContentLoaded', function() {
   const bundleData = fetchProductsFromDatabase();
   const bundleDetails = extractProductDetailsFromBundle(JSON.parse(bundleData.conditions));
   handleBundleData(bundleDetails);
-  populateDiscountCondition(bundleData)
+  populateDiscountCondition(bundleData);
+
+  // Then initialize the side cart renderer
+  setTimeout(() => {
+    sideCartRenderer();
+  }, 100);
 });
 
 function addToSideCart(variant, product, quantity = 1) {
