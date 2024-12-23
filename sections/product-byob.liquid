@@ -201,24 +201,6 @@
                 <p data-bundle-description>Select collections to view all the available products in one list.</p>
               </div>
             </div>
-
-            <div class="collection-tab-links-container">
-              <div class="tab-link-item">
-                <p>Collection 1</p>
-              </div>
-              <div class="tab-link-item">
-                <p>Collection 2</p>
-              </div>
-            </div>
-
-            <div class="collection-tab-content-container">
-              <div class="collection-tab-content-item">
-                <div class="collection-products-container-header">
-                  <p>(6 Products)</p>
-                </div>
-                <div class="collection-products-container">loading...</div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -289,15 +271,15 @@
             <div class="side-cart-checkout-wrapper">
               <div class="side-cart-checkout-item subtotal">
                 <p>Subtotal</p>
-                <p><span>$</span>100</p>
+                <p>0</p>
               </div>
               <div class="side-cart-checkout-item discount">
                 <p>Discount</p>
-                <p><span>$</span>100</p>
+                <p>0</p>
               </div>
               <div class="side-cart-checkout-item total">
                 <p>Total</p>
-                <p><span>$</span>100</p>
+                <p>0</p>
               </div>
             </div>
             <div class="side-cart-checkout-cta">
@@ -321,48 +303,6 @@ if (!window.config) {
   window.config = {};
 }
 window.config.products = [];
-
-window.config.collectionProducts = {
-  {%- for collection in collections -%}
-    "{{ collection.id }}": [
-      {%- for product in collection.products -%}
-        {
-          "id": {{ product.id | json }},
-          "title": {{ product.title | json }},
-          "price": {{ product.price }},
-          "featured_image": {{ product.featured_image | img_url: 'medium' | json }},
-          "url": {{ product.url | json }},
-          "has_only_default_variant": {{ product.has_only_default_variant | json }},
-          "options": {{ product.options_with_values | json }},
-          "variants": [
-            {%- for variant in product.variants -%}
-              {
-                "id": {{ variant.id | json }},
-                "title": {{ variant.title | json }},
-                "price": {{ variant.price }},
-                "available": {{ variant.available | json }},
-                "featured_image": {{ variant.featured_image | default: product.featured_image | img_url: 'medium' | json }},
-                "options": {{ variant.options | json }}
-              }
-              {%- unless forloop.last -%},{%- endunless -%}
-            {%- endfor -%}
-          ]
-        }
-        {%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    ]
-    {%- unless forloop.last -%},{%- endunless -%}
-  {%- endfor -%}
-};
-
-// Initialize products from collections
-window.config.products = Object.values(window.config.collectionProducts)
-  .flat()
-  .map(product => ({
-    ...product,
-    id: String(product.id),
-    variants: product.variants || []
-  }));
 
 // Add this after window.config initialization
 window.sideCart = {
@@ -422,22 +362,131 @@ function  fetchProductsFromDatabase(){
     "productId": "gid://shopify/Product/9594022134067",
     "bundleName": "test collection",
     "bundleDescription": "grtf",
-    "products": [],
+    "products": [
+        {
+            "id": "gid://shopify/Product/9582674936115",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762119360819",
+                "altText": "About Time Dress in MANGO MOJITO STRIPE",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ABOUTTIMEDRESS_MANGOMOJITOSTRIPE_3262.webp?v=1734070024"
+            },
+            "title": "About Time Dress",
+            "handle": "about-time-dress"
+        },
+        {
+            "id": "gid://shopify/Product/9582675493171",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762160419123",
+                "altText": "Front view of short sleeve shirt with a big golden sun graphic printed with low impact dyes",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/AFTERGLOWJAMESTEE_BIRCH_1.webp?v=1734070258"
+            },
+            "title": "Afterglow James Tee",
+            "handle": "afterglow-james-tee"
+        },
+        {
+            "id": "gid://shopify/Product/9582676541747",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762189517107",
+                "altText": "Alignment Top in Puce Stripe",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ALIGNMENTTOP_PUCESTRIPE_1.webp?v=1734070425"
+            },
+            "title": "Alignment Top",
+            "handle": "alignment-top"
+        },
+        {
+            "id": "gid://shopify/Product/9582674444595",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762081710387",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ALLYPANT_CAMEOROSE_3040.webp?v=1734069801"
+            },
+            "title": "Ally Jogger in French Terry",
+            "handle": "ally-pant"
+        },
+        {
+            "id": "gid://shopify/Product/9582676640051",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762192105779",
+                "altText": "Ash Pant in Golden Brown",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ASHPANT_GOLDENBROWN_1.webp?v=1734070439"
+            },
+            "title": "Ash Pant",
+            "handle": "ash-pant"
+        },
+        {
+            "id": "gid://shopify/Product/9582674411827",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762079023411",
+                "altText": "Bucket Hat in PURPLE HEATHER",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CAMERONDRESS_CAMEOROSE_2770.webp?v=1734069788"
+            },
+            "title": "Bucket Hat",
+            "handle": "bucket-hat"
+        },
+        {
+            "id": "gid://shopify/Product/9582674805043",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762107597107",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CAMERONDRESS_HEATHERGREY_2975.webp?v=1734069957"
+            },
+            "title": "Cameron Dress",
+            "handle": "cameron-dress"
+        },
+        {
+            "id": "gid://shopify/Product/9582675231027",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762140528947",
+                "altText": "Carter Top in MANGO MOJITO",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CARTERTOP_MANGOMOJITO_4409.webp?v=1734070148"
+            },
+            "title": "Carter Top",
+            "handle": "carter-top"
+        },
+        {
+            "id": "gid://shopify/Product/9582675460403",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762158911795",
+                "altText": "Front view of slightly cropped tank top with compassion and flowers printed with non toxic dyes",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/COMPASSIONBOXYTANK_TRADEWINDS_1.webp?v=1734070249"
+            },
+            "title": "Compassion Boxy Tank",
+            "handle": "compassion-boxy-tank"
+        },
+        {
+            "id": "gid://shopify/Product/9582674477363",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762085118259",
+                "altText": "Cropped Wander Pant in HEATHER PURPLE",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CROPPEDWANDERPANT_HEATHERPURPLE_4146.webp?v=1734069820"
+            },
+            "title": "Cropped Wander Pant",
+            "handle": "cropped-wander-pant"
+        },
+        {
+            "id": "gid://shopify/Product/9582676476211",
+            "image": {
+                "id": "gid://shopify/ProductImage/47762188730675",
+                "altText": "Daily Sweatshirt in Black",
+                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/DAILYSWEATSHIRT_BLACKIRIS_1.webp?v=1734070421"
+            },
+            "title": "Daily Sweatshirt",
+            "handle": "daily-sweatshirt"
+        }
+    ],
     "isDiscountOptional": false,
-    "discountType": "percentage",
-    "discountValue": "88",
+    "discountType": "tiered",
+    "discountValue": "",
     "noDiscount": false,
     "media": [],
-    "conditions": "[{\"id\":1734634564846,\"productCondition\":\"any\",\"productConditionNumber\":\"4\",\"productSelectionType\":\"collection\",\"selectedProducts\":[],\"selectedCollection\":{\"id\":\"gid://shopify/Collection/486469304627\",\"title\":\"test\",\"productsCount\":5},\"chooseEachItemOnce\":false},{\"id\":1734637506417,\"productCondition\":\"any\",\"productConditionNumber\":\"1\",\"productSelectionType\":\"collection\",\"selectedProducts\":[],\"selectedCollection\":{\"id\":\"gid://shopify/Collection/486472515891\",\"title\":\"hello\",\"productsCount\":4},\"chooseEachItemOnce\":false},{\"id\":1734637847573,\"productCondition\":\"any\",\"productConditionNumber\":\"1\",\"productSelectionType\":\"product\",\"selectedProducts\":[{\"id\":\"gid://shopify/Product/9582674936115\",\"title\":\"About Time Dress\",\"handle\":\"about-time-dress\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762119360819\",\"altText\":\"About Time Dress in MANGO MOJITO STRIPE\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ABOUTTIMEDRESS_MANGOMOJITOSTRIPE_3262.webp?v=1734070024\"}},{\"id\":\"gid://shopify/Product/9582675493171\",\"title\":\"Afterglow James Tee\",\"handle\":\"afterglow-james-tee\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762160419123\",\"altText\":\"Front view of short sleeve shirt with a big golden sun graphic printed with low impact dyes\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/AFTERGLOWJAMESTEE_BIRCH_1.webp?v=1734070258\"}},{\"id\":\"gid://shopify/Product/9582677131571\",\"title\":\"Striped Poncho\",\"handle\":\"striped-poncho\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762204361011\",\"altText\":\"Striped Poncho in Golden Brown Stripe\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/STRIPEDPONCHO_GOLDENBROWNSTRIPE_1.webp?v=1734070507\"}}],\"selectedCollection\":null,\"chooseEachItemOnce\":false}]",
-    "tierBasedOn": "",
-    "purchaseRequirement": "",
-    "tiers": "[]",
+    "conditions": "[]",
+    "tierBasedOn": "percentage",
+    "purchaseRequirement": "quantity",
+    "tiers": "[{\"id\":1734942590709,\"condition\":\"any\",\"requirement\":\"2\",\"value\":\"20\"},{\"id\":1734942596198,\"condition\":\"any\",\"requirement\":\"3\",\"value\":\"30\"},{\"id\":1734942600485,\"condition\":\"any\",\"requirement\":\"4\",\"value\":\"40\"}]",
     "productStatus": "active",
     "createdAt": "2024-12-19T12:08:28.430Z",
-    "updatedAt": "2024-12-20T21:02:22.772Z",
+    "updatedAt": "2024-12-23T08:36:32.357Z",
     "showStepper": true,
     "userId": "offline_byob-templates.myshopify.com"
-} 
+}
       return resdata;
 }
 
@@ -484,148 +533,69 @@ function formatMoney(cents, format) {
    return formatString.replace(placeholderRegex, value);
 }
 
-function extractProductDetailsFromBundle(bundles) {
-  try {
-    let allProductItems = [];
-    let allCollectionItems = [];
-    
-    // Handle both array and single object responses
-    const bundleArray = Array.isArray(bundles) ? bundles : [bundles];
-    
-    bundleArray.forEach(bundle => {
-      if (bundle.productSelectionType === "product" && 
-          bundle.selectedProducts && 
-          Array.isArray(bundle.selectedProducts)) {
-        allProductItems = [...allProductItems, ...bundle.selectedProducts];
-      }
-      
-      if (bundle.productSelectionType === "collection" && 
-          bundle.selectedCollection) {
-        allCollectionItems.push(bundle.selectedCollection);
-      }
-    });
-
-    return {
-      // If both types exist, prioritize products
-      type: allProductItems.length > 0 ? 'product' : 'collection',
-      products: allProductItems,
-      collections: allCollectionItems
-    };
-  } catch (error) {
-    console.error('Error extracting details:', error);
-    return {
-      type: 'product',
-      products: [],
-      collections: []
-    };
-  }
-}
-
-function attachCollectionLinkListeners() {
-  const collectionLinks = document.querySelectorAll('.collection-link');
-  collectionLinks.forEach(link => {
-    link.addEventListener('click', function() {
-      const collectionId = this.dataset.collectionId;
-      // Clean the collection ID for use in selector
-      const cleanId = collectionId.replace('gid://shopify/Collection/', '');
-      const collectionSection = document.querySelector(`#collection-${cleanId}`);
-      
-      if (collectionSection) {
-        collectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
-}
-
-async function handleBundleData(bundleDetails) {
+async function handleBundleData(products) {
   try {
     const mainWrapper = document.querySelector('.main-wrapper');
     if (!mainWrapper) return;
 
     // Clear existing content
-    mainWrapper.innerHTML = `
-      <div class="collection-info-container">
-        <div class="collection-info-container-header">
-          <h3 data-bundle-header>Choose from available products</h3>
-        </div>
-        <div class="collection-info-container-content">
-          <p data-bundle-description>Browse through our curated selection of products.</p>
-        </div>
-      </div>
-    `;
-    updateBundleText(bundleDetails);
-
-    // Add collection links at the top
-    if (bundleDetails.collections.length > 0) {
-      mainWrapper.innerHTML += `
-        <div class="collection-links-container">
-          ${bundleDetails.collections.map((collection) => `
-            <button class="collection-link" data-collection-id="${collection.id}">
-              Collection: ${collection.title} (${collection.productsCount} Products)
-            </button>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    // Render all collections vertically
-    if (bundleDetails.collections.length > 0) {
-      bundleDetails.collections.forEach((collection, index) => {
-        mainWrapper.innerHTML += `
-            <div class="collection-section" id="collection-${collection.id.replace('gid://shopify/Collection/', '')}">
-              <h3 class="section-title"> Select from collection ${collection.title}</h3>
-              <div class="collection-products-container">
-                Loading collection products...
-            </div>
-          </div>
-        `;
-      });
-
-      // Render products for each collection
-      bundleDetails.collections.forEach((collection) => {
-        renderCollectionProductsVertical(collection);
-      });
-    }
-
-    // Handle individual products if they exist
-    if (bundleDetails.products.length > 0) {
-      mainWrapper.innerHTML += `
+    mainWrapper.innerHTML += `
         <div class="individual-products-section">
           <h3 class="section-title">Select from available products</h3>
           <div class="individual-products-container">
             Loading products...
           </div>
         </div>
-      `;
+    `;
 
-      const productData = await fetchProductsDataFromShopify(bundleDetails.products);
+    const productData = await fetchProductsDataFromShopify(products);
       renderProductItems(productData, '.individual-products-container');
-    }
 
-    // Attach scroll event listeners
-    attachCollectionLinkListeners();
-    
   } catch (error) {
     console.error('Error handling bundle data:', error);
   }
 }
 
-function updateBundleText(bundleDetails) {
+function updateMetaData(bundleDetails) {
   const headerElement = document.querySelector('[data-bundle-header]');
   const descriptionElement = document.querySelector('[data-bundle-description]');
+  const topDiscountsContainer = document.querySelector(".template-top-data-discount-info");
 
   if (headerElement && descriptionElement) {
-    if (bundleDetails.products.length > 0 && bundleDetails.collections.length > 0) {
-      headerElement.textContent = 'Choose from selected products and collections';
-      descriptionElement.textContent = 'Browse through our curated selection of products or explore collections.';
-    } else if (bundleDetails.collections.length > 0) {
-      headerElement.textContent = 'Choose products from collections';
-      descriptionElement.textContent = 'Select collections to view all the available products.';
-    } else {
-      headerElement.textContent = 'Choose from selected products';
-      descriptionElement.textContent = 'Browse through our curated selection of products.';
-    }
+    headerElement.textContent = 'Choose from selected products';
+    descriptionElement.textContent = 'Browse through our curated selection of products.';
   }
+
+  if (!topDiscountsContainer || !window.discountConditions?.tiers) return;
+
+  // Clear existing content
+  topDiscountsContainer.innerHTML = '';
+
+  // Get sorted tiers
+  const sortedTiers = [...window.discountConditions.tiers].sort((a, b) => 
+    parseFloat(a.threshold) - parseFloat(b.threshold)
+  );
+
+  sortedTiers.forEach(tier => {
+    const thresholdText = window.discountConditions.purchaseRequirement === 'amount'
+      ? formatMoney(tier.threshold * 100, shop_money_format)
+      : `${tier.threshold} ${tier.threshold > 1 ? 'Products' : 'Product'}`;
+
+    const discountText = getDiscountText(tier.type || window.discountConditions.tierBasedOn, tier.value);
+
+    const discountItem = `
+      <div class="discount-info-item">
+        <div class="discount-info-item-title">
+          <h3>${discountText}</h3>
+        </div>
+        <div class="discount-info-item-description">
+          <p>${thresholdText}</p>
+        </div>
+      </div>
+    `;
+
+    topDiscountsContainer.innerHTML += discountItem;
+  });
 }
 
 async function fetchProductsDataFromShopify(products) {
@@ -775,22 +745,6 @@ function attachProductEventListeners() {
       // First try to find product in main products array
       let product = window.config.products.find(p => parseInt(p.id) === productId);
       
-      // If not found, check collection products
-      if (!product) {
-        for (const collectionId in window.config.collectionProducts) {
-          const collectionProduct = window.config.collectionProducts[collectionId].find(
-            p => parseInt(p.id) === productId
-          );
-          if (collectionProduct) {
-            product = {
-              ...collectionProduct,
-              id: String(collectionProduct.id),
-              variants: collectionProduct.variants || []
-            };
-            break;
-          }
-        }
-      }
 
       if (!product) {
         console.error('Product not found:', productId);
@@ -954,90 +908,6 @@ function attachProductEventListeners() {
   }
 }
 
-function renderCollectionProductsVertical(collection) {
-  try {
-    const id = collection.id.replace('gid://shopify/Collection/', '');
-    const collectionProducts = window.config.collectionProducts[id] || [];
-    
-    // Add collection products to the main products array if they don't exist
-    collectionProducts.forEach(product => {
-      const formattedProduct = {
-        ...product,
-        id: String(product.id),
-        variants: product.variants || [],
-        options: product.options || [],
-        title: product.title || '',
-        price: product.price || 0,
-        featured_image: product.featured_image || ''
-      };
-      
-      const existingProductIndex = window.config.products.findIndex(p => p.id === formattedProduct.id);
-      if (existingProductIndex === -1) {
-        window.config.products.push(formattedProduct);
-      } else {
-        // Update existing product with collection data
-        window.config.products[existingProductIndex] = {
-          ...window.config.products[existingProductIndex],
-          ...formattedProduct
-        };
-      }
-    });
-
-    const cleanId = collection.id.replace('gid://shopify/Collection/', '');
-    const productsContainer = document.querySelector(`#collection-${cleanId} .collection-products-container`);
-    
-    if (!productsContainer) {
-      console.error(`Container not found for collection: ${collection.title}`);
-      return;
-    }
-    
-    productsContainer.innerHTML = `
-        ${collectionProducts.map(product => `
-          <div class="product-card" data-collection-id="${id}" data-product-id="${parseInt(product.id)}">
-            <div class="product-card-wrapper">
-              <div class="product-card-image">
-                <img
-                  src="${product.featured_image}"
-                  alt="${product.title}"
-                  width="100%"
-                  height="100%"
-                >
-              </div>
-
-              <div class="product-card-content">
-                <div class="product-card-top">
-                  <div class="product-title">
-                    <h4>${product.title}</h4>
-                  </div>
-                </div>
-
-                <div class="product-card-mid">
-                  <div class="product-price">
-                    <p>${formatMoney(product.price, shop_money_format)}</p>
-                  </div>
-                  <div class="product-available-variants">
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="product-card-cta">
-                <div class="add-to-bundle">
-                  <button>Add to Cart</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `).join('')}
-    `;
-
-    attachProductEventListeners();
-  } catch (error) {
-    console.error('Error rendering collection products:', error);
-  }
-}
-
 function closeVariantSelector() {
   const variantPopup = document.querySelector('.product-variant-selector');
   if (variantPopup) {
@@ -1170,7 +1040,7 @@ function updateSideCart(product, variant, quantity = 1) {
     window.sideCart.subtotal += variant.price * quantity;
   }
 
-  window.sideCart.discount = calculateDiscount(window.sideCart.items);
+  window.sideCart.discount = calculateTieredDiscount(window.sideCart.items);
   window.sideCart.total = window.sideCart.subtotal - window.sideCart.discount;
 
   renderSideCart();
@@ -1184,104 +1054,6 @@ function updateSideCart(product, variant, quantity = 1) {
     // For normal discounts
     updateDiscountSteppers(window.discountConditions?.conditions || []);
   }
-}
-
-function calculateDiscount(cartItems) {
-  if (!window.discountConditions || !cartItems.length) return 0;
-
-  if (window.discountConditions.discountType === 'tiered') {
-    return calculateTieredDiscount(cartItems);
-  }
-
-  const { discountType, discountValue, conditions } = window.discountConditions;
-  const conditionsStatus = [];
-  
-  // Check each condition
-  for (const condition of conditions) {
-    const { productConditionNumber, productSelectionType, selectedCollection, selectedProducts } = condition;
-    let matchingItemsCount = 0;
-
-    // Count matching items based on condition type
-    cartItems.forEach(cartItem => {
-      let isMatch = false;
-      const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
-
-      if (productSelectionType === 'collection' && selectedCollection) {
-        // Check if item is from the specified collection
-        const collectionProducts = window.config.collectionProducts[selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
-        isMatch = collectionProducts.some(p => {
-          const cleanCollectionProductId = String(p.id).replace('gid://shopify/Product/', '');
-          return cleanCollectionProductId === cleanCartProductId;
-        });
-      }
-
-      if (productSelectionType === 'product' && selectedProducts) {
-        // Check if item matches any of the selected products
-        isMatch = selectedProducts.some(p => {
-          const cleanSelectedProductId = String(p.id).replace('gid://shopify/Product/', '');
-          return cleanSelectedProductId === cleanCartProductId;
-        });
-      }
-
-      if (isMatch) {
-        matchingItemsCount += cartItem.quantity;
-      }
-    });
-
-    conditionsStatus.push({
-      condition,
-      met: matchingItemsCount >= productConditionNumber,
-      required: productConditionNumber,
-      current: matchingItemsCount
-    });
-  }
-
-  // Log conditions status for debugging
-  // console.log('Cart Items:', cartItems);
-  // console.log('Discount Conditions Status:', conditionsStatus);
-
-  // Check if all conditions are met
-  const allConditionsMet = conditionsStatus.every(status => status.met);
-  
-  if (!allConditionsMet) {
-    const remainingConditions = conditionsStatus
-      .filter(status => !status.met)
-      .map(status => {
-        const condition = status.condition;
-        const remaining = status.required - status.current;
-        return `Need ${remaining} more ${remaining === 1 ? 'item' : 'items'} from ${
-          condition.productSelectionType === 'collection' 
-            ? `collection "${condition.selectedCollection.title}"`
-            : 'selected products'
-        }`;
-      });
-    // console.log('Remaining conditions to meet:', remainingConditions);
-    return 0;
-  }
-
-  // Calculate discount based on type
-  const subtotal = window.sideCart.subtotal;
-  let discountAmount = 0;
-
-  switch (discountType) {
-  case 'percentage':
-    discountAmount = (subtotal * parseFloat(discountValue)) / 100;
-    break;
-  case 'fixed-amount':
-    discountAmount = parseFloat(discountValue) * 100; // Convert to cents
-    break;
-  case 'price':
-    // For price type, we want the final total to be the discountValue
-    const targetPrice = parseFloat(discountValue) * 100; // Convert to cents
-    discountAmount = subtotal - targetPrice;
-    // Ensure we don't give a negative discount
-    if (discountAmount < 0) discountAmount = 0;
-    break;
-  default:
-    discountAmount = 0;
-    }
-
-  return Math.round(discountAmount); // Return rounded amount in cents
 }
 
 function calculateTieredDiscount(cartItems) {
@@ -1394,7 +1166,7 @@ function renderSideCart() {
             <button class="quantity-btn plus" aria-label="Increase quantity">+</button>
           </div>
           <div class="scpt-price new-price">
-            <p><span>$</span>${(item.price / 100).toFixed(2)}</p>
+            <p>${formatMoney(item.price, shop_money_format)}</p>
           </div>
         </div>
       </div>
@@ -1427,11 +1199,14 @@ function removeFromSideCart(variantId) {
     const item = window.sideCart.items[itemIndex];
     window.sideCart.subtotal -= item.price * item.quantity;
     window.sideCart.items.splice(itemIndex, 1);
-    window.sideCart.discount = calculateDiscount(window.sideCart.items);
+    window.sideCart.discount = calculateTieredDiscount(window.sideCart.items);
     window.sideCart.total = window.sideCart.subtotal - window.sideCart.discount;
     renderSideCart();
-    // Add this line to update discount steppers
-    updateDiscountSteppers(window.discountConditions.conditions);
+    
+    // Update tiered discount UI
+    const discountStepperContainer = document.querySelectorAll('.discount-stepper');
+    const discountInfoHeaders = document.querySelectorAll('.discount-info-container-header h3');
+    updateTieredSteppers(window.discountConditions.tiers, discountStepperContainer, discountInfoHeaders);
   } else {
     console.error('Item not found in cart with variantId:', variantId);
   }
@@ -1442,98 +1217,25 @@ function updateCartTotals() {
   const discountElement = document.querySelector('.side-cart-checkout-item.discount p:last-child');
   const totalElement = document.querySelector('.side-cart-checkout-item.total p:last-child');
 
-  // console.log('Cart Totals Debug:', {
-  //   subtotal: window.sideCart?.subtotal,
-  //   discount: window.sideCart?.discount,
-  //   total: window.sideCart?.total,
-  //   discountConditions: window.discountConditions
-  // });
-
   if (subtotalElement) {
-    subtotalElement.innerHTML = `<span>$</span>${((window.sideCart?.subtotal || 0) / 100).toFixed(2)}`;
+    // subtotalElement.innerHTML = `<span>$</span>${((window.sideCart?.subtotal || 0) / 100).toFixed(2)}`;
+    subtotalElement.innerHTML = formatMoney(window.sideCart?.subtotal || 0, shop_money_format);
+
   }
 
   if (discountElement) {
     const discountAmount = window.sideCart?.discount || 0;
-    let discountText = '';
-
-    if (window.discountConditions?.discountType === 'tiered') {
-      const cartItems = window.sideCart?.items || [];
-      const baseValue = calculateTierBaseValue(cartItems);
-      const applicableTier = findApplicableTier(baseValue);
-
-      // console.log('Tiered Discount Debug:', {
-      //   baseValue,
-      //   applicableTier,
-      //   discountAmount
-      // });
-
-      if (applicableTier) {
-        discountText = ` (-${getDiscountText(applicableTier.type, applicableTier.value)})`;
-      }
-    } else {
-      const discountType = window.discountConditions?.discountType === 'percentage' ? '%' : '$';
-      const discountValue = window.discountConditions?.discountValue || 0;
-      discountText = ` (-${discountValue}${discountType})`;
-    }
-
-    discountElement.innerHTML = `<span>$</span>${(discountAmount / 100).toFixed(2)}${discountText}`;
+    const cartItems = window.sideCart?.items || [];
+    const baseValue = calculateTierBaseValue(cartItems);
+    const applicableTier = findApplicableTier(baseValue);
+    const discountText = applicableTier ? ` (-${getDiscountText(applicableTier.type, applicableTier.value)})` : '';
+    
+    discountElement.innerHTML = `${formatMoney(discountAmount, shop_money_format)}${discountText}`;
   }
 
   if (totalElement) {
-    totalElement.innerHTML = `<span>$</span>${((window.sideCart?.total || 0) / 100).toFixed(2)}`;
+    totalElement.innerHTML = formatMoney(window.sideCart?.total || 0, shop_money_format);
   }
-}
-
-function isProductConditionMet(productId, conditions) {
-  if (!conditions || !window.sideCart) return false;
-
-  return conditions.some(condition => {
-    let isPartOfCondition = false;
-    let conditionMet = false;
-    let matchingItemsCount = 0;
-
-    // Check if product belongs to this condition
-    if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
-      const collectionProducts = window.config.collectionProducts[condition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
-      isPartOfCondition = collectionProducts.some(p => 
-        String(p.id).replace('gid://shopify/Product/', '') === String(productId).replace('gid://shopify/Product/', '')
-      );
-    } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
-      isPartOfCondition = condition.selectedProducts.some(p => 
-        String(p.id).replace('gid://shopify/Product/', '') === String(productId).replace('gid://shopify/Product/', '')
-      );
-    }
-
-    // If product is part of this condition, check if condition is met
-    if (isPartOfCondition) {
-      window.sideCart.items.forEach(cartItem => {
-        let isMatch = false;
-        const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
-
-        if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
-          const collectionProducts = window.config.collectionProducts[condition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
-          isMatch = collectionProducts.some(p => {
-            const cleanCollectionProductId = String(p.id).replace('gid://shopify/Product/', '');
-            return cleanCollectionProductId === cleanCartProductId;
-          });
-        } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
-          isMatch = condition.selectedProducts.some(p => {
-            const cleanSelectedProductId = String(p.id).replace('gid://shopify/Product/', '');
-            return cleanSelectedProductId === cleanCartProductId;
-          });
-        }
-
-        if (isMatch) {
-          matchingItemsCount += cartItem.quantity;
-        }
-      });
-
-      conditionMet = matchingItemsCount >= condition.productConditionNumber;
-    }
-
-    return isPartOfCondition && conditionMet;
-  });
 }
 
 function findApplicableTier(baseValue) {
@@ -1635,26 +1337,20 @@ function updateItemQuantity(variantId, newQuantity) {
   item.quantity = newQuantity;
   
   window.sideCart.subtotal += item.price * (newQuantity - oldQuantity);
-  window.sideCart.discount = calculateDiscount(window.sideCart.items);
+  window.sideCart.discount = calculateTieredDiscount(window.sideCart.items);
   window.sideCart.total = window.sideCart.subtotal - window.sideCart.discount;
 
-  // Instead of calling updateSideCart, call renderSideCart directly
+  // call renderSideCart
   renderSideCart();
   
   // Update the discount steppers
-  if (window.discountConditions?.discountType === 'tiered') {
     const discountStepperContainer = document.querySelectorAll('.discount-stepper');
     const discountInfoHeaders = document.querySelectorAll('.discount-info-container-header h3');
     updateTieredSteppers(window.discountConditions.tiers, discountStepperContainer, discountInfoHeaders);
-  } else {
-    updateDiscountSteppers(window.discountConditions?.conditions || []);
-  }
 }
 
 function populateDiscountCondition(bundleData) {
   if (!bundleData) return;
-
-  if (bundleData.tierBasedOn && bundleData.tiers) {
     try {
       // Handle tiered discount
       const tiers = JSON.parse(bundleData.tiers || '[]');
@@ -1676,51 +1372,27 @@ function populateDiscountCondition(bundleData) {
       };
       window.discountConditions = discountCondition;
       updateDiscountSteppers(discountCondition.tiers);
+      updateMetaData(bundleData);
+
     } catch (error) {
       console.error('Error parsing tiers:', error);
     }
-  } else {
-    // Your existing normal discount logic
-    const conditions = JSON.parse(bundleData.conditions || '[]');
-    const discountType = bundleData.discountType || 'fixed-amount';
-    const discountValue = bundleData.discountValue || '0';
-
-    const discountCondition = {
-      discountType: discountType,
-      discountValue: discountValue,
-      conditions: conditions
-    };
-    window.discountConditions = discountCondition;
-    updateDiscountSteppers(conditions);
-  }
 }
 
 function getDiscountText(discountType, value) {
   const tierBasedOn = window.discountConditions?.tierBasedOn;
   
-  if (window.discountConditions?.discountType === 'tiered') {
-    switch (tierBasedOn) {
-      case 'percentage':
-        return `${value}% OFF`;
-      case 'fixed-amount':
-        return `$${value} OFF`;
-      case 'price':
-        return `Fixed price $${value}`;
-      case 'per-item':
-        return `$${value} OFF per item`;
-      default:
-        return `$${value} OFF`;
-    }
-  }
-
-  // For non-tiered discounts
-  switch(discountType) {
+  switch (tierBasedOn) {
     case 'percentage':
       return `${value}% OFF`;
     case 'fixed-amount':
-      return `$${value} OFF`;
+      return `${value} OFF`;
+    case 'price':
+      return `Fixed price ${value}`;
+    case 'per-item':
+      return `${value} OFF per item`;
     default:
-      return `$${value} OFF`;
+      return `${value} OFF`;
   }
 }
 
@@ -1742,12 +1414,6 @@ function calculateTierBaseValue(cartItems) {
   return cartItems.reduce((sum, item) => sum + item.quantity, 0);
 }
 
-function findNextTier(tiers, currentValue) {
-  return tiers
-    .sort((a, b) => a.threshold - b.threshold)
-    .find(tier => tier.threshold > currentValue);
-}
-
 function formatTierRemaining(tier, currentValue) {
   const remaining = tier.threshold - currentValue;
   const { purchaseRequirement } = window.discountConditions;
@@ -1763,17 +1429,30 @@ function formatTierRemaining(tier, currentValue) {
     : `${remaining} ${remaining === 1 ? 'item' : 'items'}`;
 }
 
+function getPreDiscountText(purchaseRequirement) {
+  if (!purchaseRequirement) {
+    return "buy";
+  }
+  switch (purchaseRequirement) {
+    case 'quantity': 
+      return "Add";
+    case 'amount': 
+      return "Spend";
+    default: 
+      return "Buy"; 
+  }
+}
+
 function updateTieredSteppers(tiers, stepperContainers, infoHeaders) {
   if (!Array.isArray(tiers) || !stepperContainers) return;
   
   const cartItems = window.sideCart?.items || [];
   const baseValue = calculateTierBaseValue(cartItems);
   
-  // Sort tiers by threshold in descending order
-  const sortedTiers = [...tiers].sort((a, b) => b.threshold - a.threshold);
-  const maxTier = sortedTiers[0];
+  // Sort tiers by threshold in ascending order (lowest to highest)
+  const sortedTiers = [...tiers].sort((a, b) => a.threshold - b.threshold);
+  const maxTier = sortedTiers[sortedTiers.length - 1];
   const currentTier = findApplicableTier(baseValue);
-  const nextTier = sortedTiers.find(tier => tier.threshold > baseValue);
   
   // Check if we've reached the maximum tier
   const isMaxTierReached = currentTier && currentTier.threshold === maxTier.threshold;
@@ -1800,26 +1479,32 @@ function updateTieredSteppers(tiers, stepperContainers, infoHeaders) {
     }
   });
 
-  // Rest of the existing updateTieredSteppers function
   stepperContainers.forEach(container => {
     if (!container) return;
     container.innerHTML = '';
     
-    tiers.forEach(tier => {
+    sortedTiers.forEach(tier => {
       if (!tier) return;
       
       const stepItem = document.createElement('div');
       stepItem.classList.add('discount-stepper-item');
       
+      // Add class to indicate if this tier is active or completed
+      if (baseValue >= tier.threshold) {
+        stepItem.classList.add('active');
+      } else if (currentTier && tier.threshold === currentTier.threshold) {
+        stepItem.classList.add('active');
+      }
+      
       const thresholdText = window.discountConditions.purchaseRequirement === 'amount'
-        ? formatMoney(tier.threshold * 100,shop_money_format)
+        ? formatMoney(tier.threshold * 100, shop_money_format)
         : window.discountConditions.tierBasedOn === 'total_price'
-          ? formatMoney(tier.threshold * 100,shop_money_format)
+          ? formatMoney(tier.threshold * 100, shop_money_format)
           : `${tier.threshold} items`;
 
       stepItem.innerHTML = `
         <div class="discount-condition">
-          <p>Spend ${thresholdText}</p>
+          <p>${getPreDiscountText(window.discountConditions.purchaseRequirement)} ${thresholdText}</p>
         </div>
         <div class="discount-value">
           <p>${getDiscountText(tier.type || window.discountConditions.tierBasedOn, tier.value)}</p>
@@ -1829,10 +1514,18 @@ function updateTieredSteppers(tiers, stepperContainers, infoHeaders) {
     });
   });
 
-  // Update header content
-  const headerContent = nextTier
-    ? `Add ${formatTierRemaining(nextTier, baseValue)} more to get ${getDiscountText(nextTier.type || 'percentage', nextTier.value || 0)}!`
-    : 'Maximum discount tier reached!';
+  // Update header content based on next achievable tier
+  let headerContent;
+  if (isMaxTierReached) {
+    headerContent = 'Maximum discount tier reached!';
+  } else {
+    const nextTier = sortedTiers.find(tier => tier.threshold > baseValue);
+    if (nextTier) {
+      headerContent = `${getPreDiscountText(window.discountConditions.purchaseRequirement)} ${formatTierRemaining(nextTier, baseValue)} more to get ${getDiscountText(nextTier.type || 'percentage', nextTier.value || 0)}!`;
+    } else {
+      headerContent = 'Add items to start earning discounts!';
+    }
+  }
 
   infoHeaders.forEach(header => {
     if (header) header.innerHTML = headerContent;
@@ -1840,274 +1533,59 @@ function updateTieredSteppers(tiers, stepperContainers, infoHeaders) {
 }
 
 function updateDiscountSteppers(conditions) {
-     const discountHeader = document.querySelector('.template-top-data-discount-info');
      const discountStepperContainer = document.querySelectorAll('.discount-stepper');
      const discountInfoHeaders = document.querySelectorAll('.discount-info-container-header h3');
-     const addToCartButtons = document.querySelectorAll('.add-to-bundle button');
-
-     if (!window.discountConditions) return;
-
-     if (window.discountConditions.discountType === 'tiered') {
     updateTieredSteppers(conditions, discountStepperContainer, discountInfoHeaders);
-    return;
-    }
-
-    //  const discountType = window.discountConditions.discountType === 'percentage' ? '%' : shop_money_format
-    const discountValueToDisplay = getDiscountText(window.discountConditions.discountType,window.discountConditions.discountValue)
-     
-     const discountText = `Complete the following conditions to get ${discountValueToDisplay} off on your cart total`;
-    // const discountText = getDiscountText(window.discountConditions.discountType,window.discountConditions.discountValue)
-     discountHeader.innerHTML = `
-     <div class="discount-header-normal-condition">${discountText}</div>
-     `;
-
-     // Check if all conditions are met
-     const cartItems = window.sideCart?.items || [];
-     const allConditionsMet = conditions.every(condition => {
-         let matchingItemsCount = 0;
-
-         cartItems.forEach(cartItem => {
-             const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
-             let isMatch = false;
-
-             if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
-                 const collectionProducts = window.config.collectionProducts[condition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
-                 isMatch = collectionProducts.some(p => {
-                     const cleanCollectionProductId = String(p.id).replace('gid://shopify/Product/', '');
-                     return cleanCollectionProductId === cleanCartProductId;
-                 });
-             } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
-                 isMatch = condition.selectedProducts.some(p => {
-                     const cleanSelectedProductId = String(p.id).replace('gid://shopify/Product/', '');
-                     return cleanSelectedProductId === cleanCartProductId;
-                 });
-             }
-
-             if (isMatch) {
-                 matchingItemsCount += cartItem.quantity;
-             }
-         });
-
-         return matchingItemsCount >= condition.productConditionNumber;
-     });
-
-     // Disable/Enable add to cart buttons based on conditions
-     addToCartButtons.forEach(button => {
-         if (allConditionsMet) {
-             button.disabled = true;
-             button.textContent = 'Maximum Items Added';
-         } else {
-             button.disabled = false;
-             button.textContent = 'Add to Cart';
-         }
-     });
-
-     // Update all discount info headers
-     if (discountInfoHeaders.length > 0) {
-         const remainingConditions = conditions.filter(condition => {
-             const cartItems = window.sideCart?.items || [];
-             let matchingItemsCount = 0;
-
-             cartItems.forEach(cartItem => {
-                 const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
-                 let isMatch = false;
-
-                 if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
-                     const collectionProducts = window.config.collectionProducts[condition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
-                     isMatch = collectionProducts.some(p => {
-                         const cleanCollectionProductId = String(p.id).replace('gid://shopify/Product/', '');
-                         return cleanCollectionProductId === cleanCartProductId;
-                     });
-                 } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
-                     isMatch = condition.selectedProducts.some(p => {
-                         const cleanSelectedProductId = String(p.id).replace('gid://shopify/Product/', '');
-                         return cleanSelectedProductId === cleanCartProductId;
-                     });
-                 }
-
-                 if (isMatch) {
-                     matchingItemsCount += cartItem.quantity;
-                 }
-             });
-
-             return matchingItemsCount < condition.productConditionNumber;
-         });
-
-         let headerContent;
-         
-         if (remainingConditions.length > 0) {
-             const firstCondition = remainingConditions[0];
-             const cartItems = window.sideCart?.items || [];
-             let matchingItemsCount = 0;
-
-             cartItems.forEach(cartItem => {
-                 const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
-                 let isMatch = false;
-
-                 if (firstCondition.productSelectionType === 'collection' && firstCondition.selectedCollection) {
-                     const collectionProducts = window.config.collectionProducts[firstCondition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
-                     isMatch = collectionProducts.some(p => {
-                         const cleanCollectionProductId = String(p.id).replace('gid://shopify/Product/', '');
-                         return cleanCollectionProductId === cleanCartProductId;
-                     });
-                 } else if (firstCondition.productSelectionType === 'product' && firstCondition.selectedProducts) {
-                     isMatch = firstCondition.selectedProducts.some(p => {
-                         const cleanSelectedProductId = String(p.id).replace('gid://shopify/Product/', '');
-                         return cleanSelectedProductId === cleanCartProductId;
-                     });
-                 }
-
-                 if (isMatch) {
-                     matchingItemsCount += cartItem.quantity;
-                 }
-             });
-
-             const remainingItems = firstCondition.productConditionNumber - matchingItemsCount;
-             
-             headerContent = `
-                 <svg width="19" height="24" viewBox="0 0 19 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M9.49999 15.4286C9.99029 15.4286 10.4604 15.2357 10.8074 14.8924C11.1545 14.549 11.35 14.0837 11.35 13.5986C11.35 13.1134 11.1545 12.6481 10.8074 12.3048C10.4604 11.9614 9.99029 11.7686 9.49999 11.7686C9.00969 11.7686 8.53956 11.9614 8.19253 12.3048C7.8455 12.6481 7.64999 13.1134 7.64999 13.5986C7.64999 14.0837 7.8455 14.549 8.19253 14.8924C8.53956 15.2357 9.00969 15.4286 9.49999 15.4286ZM17.1 7.37143V19.8286C17.1 20.7989 16.7089 21.7294 16.0149 22.4161C15.3208 23.1028 14.3806 23.4886 13.4 23.4886H5.59999C4.61939 23.4886 3.67918 23.1028 2.98513 22.4161C2.29108 21.7294 1.89999 20.7989 1.89999 19.8286V7.37143C1.89999 6.40111 2.29108 5.47063 2.98513 4.78392C3.67918 4.0972 4.61939 3.71143 5.59999 3.71143H6.52499V2.38114C6.52499 1.89601 6.72051 1.43071 7.06754 1.08736C7.41457 0.744015 7.88469 0.551147 8.37499 0.551147H10.625C11.1153 0.551147 11.5854 0.744015 11.9324 1.08736C12.2795 1.43071 12.475 1.89601 12.475 2.38114V3.71143H13.4C14.3806 3.71143 15.3208 4.0972 16.0149 4.78392C16.7089 5.47063 17.1 6.40111 17.1 7.37143ZM8.37499 3.71143H10.625V2.38114H8.37499V3.71143ZM9.49999 17.7686C8.51939 17.7686 7.57918 17.3828 6.88513 16.6961C6.19108 16.0094 5.79999 15.0789 5.79999 14.1086C5.79999 13.1383 6.19108 12.2078 6.88513 11.5211C7.57918 10.8344 8.51939 10.4486 9.49999 10.4486C10.4806 10.4486 11.4208 10.8344 12.1149 11.5211C12.8089 12.2078 13.2 13.1383 13.2 14.1086C13.2 15.0789 12.8089 16.0094 12.1149 16.6961C11.4208 17.3828 10.4806 17.7686 9.49999 17.7686Z" fill="#0F0F0F"/>
-                 </svg>
-                 Add ${remainingItems} more ${remainingItems === 1 ? 'item' : 'items'} from ${
-                     firstCondition.productSelectionType === 'collection' 
-                         ? `collection "${firstCondition.selectedCollection.title}"`
-                         : 'selected products'
-                 } for discount!
-             `;
-         } else {
-             headerContent = `
-                 <svg width="19" height="24" viewBox="0 0 19 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M9.49999 15.4286C9.99029 15.4286 10.4604 15.2357 10.8074 14.8924C11.1545 14.549 11.35 14.0837 11.35 13.5986C11.35 13.1134 11.1545 12.6481 10.8074 12.3048C10.4604 11.9614 9.99029 11.7686 9.49999 11.7686C9.00969 11.7686 8.53956 11.9614 8.19253 12.3048C7.8455 12.6481 7.64999 13.1134 7.64999 13.5986C7.64999 14.0837 7.8455 14.549 8.19253 14.8924C8.53956 15.2357 9.00969 15.4286 9.49999 15.4286ZM17.1 7.37143V19.8286C17.1 20.7989 16.7089 21.7294 16.0149 22.4161C15.3208 23.1028 14.3806 23.4886 13.4 23.4886H5.59999C4.61939 23.4886 3.67918 23.1028 2.98513 22.4161C2.29108 21.7294 1.89999 20.7989 1.89999 19.8286V7.37143C1.89999 6.40111 2.29108 5.47063 2.98513 4.78392C3.67918 4.0972 4.61939 3.71143 5.59999 3.71143H6.52499V2.38114C6.52499 1.89601 6.72051 1.43071 7.06754 1.08736C7.41457 0.744015 7.88469 0.551147 8.37499 0.551147H10.625C11.1153 0.551147 11.5854 0.744015 11.9324 1.08736C12.2795 1.43071 12.475 1.89601 12.475 2.38114V3.71143H13.4C14.3806 3.71143 15.3208 4.0972 16.0149 4.78392C16.7089 5.47063 17.1 6.40111 17.1 7.37143ZM8.37499 3.71143H10.625V2.38114H8.37499V3.71143ZM9.49999 17.7686C8.51939 17.7686 7.57918 17.3828 6.88513 16.6961C6.19108 16.0094 5.79999 15.0789 5.79999 14.1086C5.79999 13.1383 6.19108 12.2078 6.88513 11.5211C7.57918 10.8344 8.51939 10.4486 9.49999 10.4486C10.4806 10.4486 11.4208 10.8344 12.1149 11.5211C12.8089 12.2078 13.2 13.1383 13.2 14.1086C13.2 15.0789 12.8089 16.0094 12.1149 16.6961C11.4208 17.3828 10.4806 17.7686 9.49999 17.7686Z" fill="#0F0F0F"/>
-                 </svg>
-                 All conditions met! Maximum discount applied!
-             `;
-         }
-
-         // Update all headers with the same content
-         discountInfoHeaders.forEach(header => {
-             header.innerHTML = headerContent;
-         });
-     }
-
-
-     if (!discountStepperContainer) return;
-
-     discountStepperContainer.forEach(container => {
-         container.innerHTML = '';
-
-         conditions.forEach(product => {
-             const stepItem = document.createElement('div');
-             stepItem.classList.add('discount-stepper-item');
-            //  <p>${product.productCondition}</p>
-             stepItem.innerHTML = `
-                 <div class="discount-condition">
-                 <p>${product.productConditionNumber} product${product.productConditionNumber > 1 ? 's' : ''}</p>
-                 </div>
-                 <div class="discount-value">
-                     ${product.productSelectionType === 'collection' ? `
-                         <p>From ${product.productSelectionType} ${product.selectedCollection.title}</p>
-                     ` : `<p>From ${product.productSelectionType}s</p>`}
-                 </div>
-             `;
-             container.appendChild(stepItem);
-         });
-     });
-
-    // Check each condition separately and track completed ones
-    const completedConditions = conditions.map(condition => {
-        const cartItems = window.sideCart?.items || [];
-        let matchingItemsCount = 0;
-
-        cartItems.forEach(cartItem => {
-            const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
-            let isMatch = false;
-
-            if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
-                const collectionProducts = window.config.collectionProducts[condition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
-                isMatch = collectionProducts.some(p => {
-                    const cleanCollectionProductId = String(p.id).replace('gid://shopify/Product/', '');
-                    return cleanCollectionProductId === cleanCartProductId;
-                });
-            } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
-                isMatch = condition.selectedProducts.some(p => {
-                    const cleanSelectedProductId = String(p.id).replace('gid://shopify/Product/', '');
-                    return cleanSelectedProductId === cleanCartProductId;
-                });
-            }
-
-            if (isMatch) {
-                matchingItemsCount += cartItem.quantity;
-            }
-        });
-
-        return {
-            condition,
-            completed: matchingItemsCount >= condition.productConditionNumber
-        };
-    });
-
-  // Disable buttons for completed conditions
-    completedConditions.forEach(({ condition, completed }) => {
-        if (completed) {
-            if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
-                const collectionId = condition.selectedCollection.id.replace('gid://shopify/Collection/', '');
-                const collectionProducts = document.querySelectorAll(`[data-collection-id="${collectionId}"] .add-to-bundle button`);
-                collectionProducts.forEach(button => {
-                    button.disabled = true;
-                    button.textContent = 'Collection Complete';
-                });
-            } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
-                condition.selectedProducts.forEach(product => {
-                    const productId = String(product.id).replace('gid://shopify/Product/', '');
-                    const productButton = document.querySelector(`[data-product-id="${productId}"] .add-to-bundle button`);
-                    if (productButton) {
-                        productButton.disabled = true;
-                        productButton.textContent = 'Product Complete';
-                    }
-                });
-            }
-        }
-    });
-      // Disable quantity controls for completed conditions
-    completedConditions.forEach(({ condition, completed }) => {
-    if (completed) {
-    const cartItems = window.sideCart?.items || [];
-    cartItems.forEach(cartItem => {
-      const cleanCartProductId = String(cartItem.productId).replace('gid://shopify/Product/', '');
-      let isPartOfCondition = false;
-
-      if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
-        const collectionProducts = window.config.collectionProducts[condition.selectedCollection.id.replace('gid://shopify/Collection/', '')] || [];
-        isPartOfCondition = collectionProducts.some(p => {
-          const cleanCollectionProductId = String(p.id).replace('gid://shopify/Product/', '');
-          return cleanCollectionProductId === cleanCartProductId;
-        });
-      } else if (condition.productSelectionType === 'product' && condition.selectedProducts) {
-        isPartOfCondition = condition.selectedProducts.some(p => {
-          const cleanSelectedProductId = String(p.id).replace('gid://shopify/Product/', '');
-          return cleanSelectedProductId === cleanCartProductId;
-        });
-      }
-
-      if (isPartOfCondition) {
-        const quantityControl = document.querySelector(`[data-variant-id="${cartItem.id}"] .quantity-controls`);
-        if (quantityControl) {
-          const minusBtn = quantityControl.querySelector('.quantity-btn.minus');
-          const plusBtn = quantityControl.querySelector('.quantity-btn.plus');
-          const input = quantityControl.querySelector('.quantity-input');
-
-          plusBtn.disabled = true;
-          input.disabled = true;
-          quantityControl.classList.add('condition-met');
-        }
-      }
-    });
-  }
-});
 
 }
 
-  function sideCartRenderer() {
+function addToSideCart(variant, product, quantity = 1) {
+  if (!window.sideCart) {
+    window.sideCart = {
+      items: [],
+      subtotal: 0,
+      discount: 0,
+      total: 0
+    };
+  }
+
+  const existingItem = window.sideCart.items.find(item => String(item.id) === String(variant.id));
+  
+  if (existingItem) {
+    // Update existing item
+    const newQuantity = existingItem.quantity + quantity;
+    existingItem.quantity = newQuantity;
+    window.sideCart.subtotal += variant.price * quantity;
+  } else {
+    // Create new cart item
+    const cartItem = {
+      id: variant.id,
+      productId: product.id,
+      title: product.title,
+      image: product.featured_image,
+      variant: {
+        color: product.options.findIndex(opt => opt.name.toLowerCase().includes('color') || opt.name.toLowerCase().includes('colour')) !== -1 
+          ? variant.options[product.options.findIndex(opt => opt.name.toLowerCase().includes('color') || opt.name.toLowerCase().includes('colour'))] 
+          : null,
+        size: product.options.findIndex(opt => opt.name.toLowerCase().includes('size')) !== -1 
+          ? variant.options[product.options.findIndex(opt => opt.name.toLowerCase().includes('size'))] 
+          : null
+      },
+      price: variant.price,
+      quantity: quantity
+    };
+
+    window.sideCart.items.unshift(cartItem);
+    window.sideCart.subtotal += variant.price * quantity;
+  }
+
+  window.sideCart.discount = calculateTieredDiscount(window.sideCart.items);
+  window.sideCart.total = window.sideCart.subtotal - window.sideCart.discount;
+
+  renderSideCart();
+}
+
+function sideCartRenderer() {
     const sideCartContainer = document.querySelector('.side-cart-container');
     const sideCartToggler = document.querySelector('.side-cart-toggler');
     const mainContent = document.querySelector('.main-product-content-container');
@@ -2183,66 +1661,87 @@ function updateDiscountSteppers(conditions) {
     });
 
     resizeObserver.observe(document.body);
-  }
+}
 
-// In your main initialization code
-document.addEventListener('DOMContentLoaded', function() {
-  const bundleData = fetchProductsFromDatabase();
-  const bundleDetails = extractProductDetailsFromBundle(JSON.parse(bundleData.conditions));
-  handleBundleData(bundleDetails);
-  populateDiscountCondition(bundleData);
+function handleCheckout() {
+  const checkoutButton = document.querySelector('.side-cart-checkout-cta button');
+  if (!checkoutButton || !window.sideCart?.items?.length) return;
 
-  // Then initialize the side cart renderer
-  setTimeout(() => {
-    sideCartRenderer();
-  }, 100);
-});
+  // Disable button and show loading state
+  checkoutButton.disabled = true;
+  checkoutButton.textContent = 'Adding...';
 
-function addToSideCart(variant, product, quantity = 1) {
-  if (!window.sideCart) {
+  // Prepare items for Shopify cart
+  const itemsCart = window.sideCart.items.map(item => ({
+    id: item.id,
+    quantity: item.quantity
+  }));
+
+  console.log(itemsCart)
+
+  // Create form data with bundle properties
+  const formData = {
+    items: [{
+      id: {{ product.variants[0].id }}, 
+      quantity: 1,
+      properties: {
+        __byob: JSON.stringify(itemsCart),
+        __totalByob: (window.sideCart.total / 100).toFixed(2),
+      }
+    }]
+  };
+
+  // Add to cart using Shopify Cart API
+  fetch(window.Shopify.routes.root + 'cart/add.js', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    checkoutButton.textContent = 'Redirecting to cart...';
+    
+    // Clear side cart
     window.sideCart = {
       items: [],
       subtotal: 0,
       discount: 0,
       total: 0
     };
-  }
-
-  const existingItem = window.sideCart.items.find(item => String(item.id) === String(variant.id));
-  
-  if (existingItem) {
-    // Update existing item
-    const newQuantity = existingItem.quantity + quantity;
-    existingItem.quantity = newQuantity;
-    window.sideCart.subtotal += variant.price * quantity;
-  } else {
-    // Create new cart item
-    const cartItem = {
-      id: variant.id,
-      productId: product.id,
-      title: product.title,
-      image: product.featured_image,
-      variant: {
-        color: product.options.findIndex(opt => opt.name.toLowerCase().includes('color') || opt.name.toLowerCase().includes('colour')) !== -1 
-          ? variant.options[product.options.findIndex(opt => opt.name.toLowerCase().includes('color') || opt.name.toLowerCase().includes('colour'))] 
-          : null,
-        size: product.options.findIndex(opt => opt.name.toLowerCase().includes('size')) !== -1 
-          ? variant.options[product.options.findIndex(opt => opt.name.toLowerCase().includes('size'))] 
-          : null
-      },
-      price: variant.price,
-      quantity: quantity
-    };
-
-    window.sideCart.items.unshift(cartItem);
-    window.sideCart.subtotal += variant.price * quantity;
-  }
-
-  window.sideCart.discount = calculateDiscount(window.sideCart.items);
-  window.sideCart.total = window.sideCart.subtotal - window.sideCart.discount;
-
-  renderSideCart();
-  // Add this line to update discount steppers when adding items
-  updateDiscountSteppers(window.discountConditions.conditions);
+    renderSideCart();
+    
+    // Redirect to cart page
+    setTimeout(() => {
+      window.location.href = '/cart';
+    }, 1000);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    checkoutButton.disabled = false;
+    checkoutButton.textContent = 'Add to Cart';
+    alert('There was an error adding items to cart. Please try again.');
+  });
 }
+
+// In your main initialization code
+document.addEventListener('DOMContentLoaded', function() {
+  const bundleData = fetchProductsFromDatabase();
+  updateMetaData(bundleData)
+  handleBundleData(bundleData.products);
+  populateDiscountCondition(bundleData);
+
+  // Add side cart checkout button listener
+  const checkoutButton = document.querySelector('.side-cart-checkout-cta button');
+  if (checkoutButton) {
+    checkoutButton.addEventListener('click', handleCheckout);
+  }
+
+  setTimeout(() => {
+    sideCartRenderer();
+  }, 100);
+});
+
+
 </script>
