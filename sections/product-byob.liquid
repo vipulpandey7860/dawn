@@ -46,6 +46,7 @@
 
     <div class="template-product-discount-container">
       <div class="product-variant-selector closed">
+      <div class="product-variant-selector-container">
         <div class="product-variant-selector-wrapper">
           <div class="close-variant-selector">
             <button>
@@ -141,6 +142,7 @@
         <div class="product-variant-selector-cta">
           <button>select variant</button>
         </div>
+      </div>
       </div>
       <div class="tpdc-wrapper">
         <div class="main-product-content-container">
@@ -306,6 +308,39 @@ if (!window.config) {
 }
 window.config.products = [];
 
+window.config.collectionProducts = {
+  {%- for collection in collections -%}
+    "{{ collection.id }}": [
+      {%- for product in collection.products -%}
+        {
+          "id": {{ product.id | json }},
+          "title": {{ product.title | json }},
+          "price": {{ product.price }},
+          "featured_image": {{ product.featured_image | img_url: 'medium' | json }},
+          "url": {{ product.url | json }},
+          "has_only_default_variant": {{ product.has_only_default_variant | json }},
+          "options": {{ product.options_with_values | json }},
+          "variants": [
+            {%- for variant in product.variants -%}
+              {
+                "id": {{ variant.id | json }},
+                "title": {{ variant.title | json }},
+                "price": {{ variant.price }},
+                "available": {{ variant.available | json }},
+                "featured_image": {{ variant.featured_image | default: product.featured_image | img_url: 'medium' | json }},
+                "options": {{ variant.options | json }}
+              }
+              {%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
+        }
+        {%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+    {%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%}
+};
+
 // Add this after window.config initialization
 window.sideCart = {
   items: [],
@@ -359,136 +394,27 @@ function  fetchProductsFromDatabase(){
   //      console.error('Error fetching products:', error);
   // });
 
-  const resdata = {
-    "id": "cm4va2ln2010lh7yqp0di77sz",
-    "productId": "gid://shopify/Product/9594022134067",
-    "bundleName": "test collection",
-    "bundleDescription": "grtf",
-    "products": [
-        {
-            "id": "gid://shopify/Product/9582674936115",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762119360819",
-                "altText": "About Time Dress in MANGO MOJITO STRIPE",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ABOUTTIMEDRESS_MANGOMOJITOSTRIPE_3262.webp?v=1734070024"
-            },
-            "title": "About Time Dress",
-            "handle": "about-time-dress"
-        },
-        {
-            "id": "gid://shopify/Product/9582675493171",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762160419123",
-                "altText": "Front view of short sleeve shirt with a big golden sun graphic printed with low impact dyes",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/AFTERGLOWJAMESTEE_BIRCH_1.webp?v=1734070258"
-            },
-            "title": "Afterglow James Tee",
-            "handle": "afterglow-james-tee"
-        },
-        {
-            "id": "gid://shopify/Product/9582676541747",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762189517107",
-                "altText": "Alignment Top in Puce Stripe",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ALIGNMENTTOP_PUCESTRIPE_1.webp?v=1734070425"
-            },
-            "title": "Alignment Top",
-            "handle": "alignment-top"
-        },
-        {
-            "id": "gid://shopify/Product/9582674444595",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762081710387",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ALLYPANT_CAMEOROSE_3040.webp?v=1734069801"
-            },
-            "title": "Ally Jogger in French Terry",
-            "handle": "ally-pant"
-        },
-        {
-            "id": "gid://shopify/Product/9582676640051",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762192105779",
-                "altText": "Ash Pant in Golden Brown",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/ASHPANT_GOLDENBROWN_1.webp?v=1734070439"
-            },
-            "title": "Ash Pant",
-            "handle": "ash-pant"
-        },
-        {
-            "id": "gid://shopify/Product/9582674411827",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762079023411",
-                "altText": "Bucket Hat in PURPLE HEATHER",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CAMERONDRESS_CAMEOROSE_2770.webp?v=1734069788"
-            },
-            "title": "Bucket Hat",
-            "handle": "bucket-hat"
-        },
-        {
-            "id": "gid://shopify/Product/9582674805043",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762107597107",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CAMERONDRESS_HEATHERGREY_2975.webp?v=1734069957"
-            },
-            "title": "Cameron Dress",
-            "handle": "cameron-dress"
-        },
-        {
-            "id": "gid://shopify/Product/9582675231027",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762140528947",
-                "altText": "Carter Top in MANGO MOJITO",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CARTERTOP_MANGOMOJITO_4409.webp?v=1734070148"
-            },
-            "title": "Carter Top",
-            "handle": "carter-top"
-        },
-        {
-            "id": "gid://shopify/Product/9582675460403",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762158911795",
-                "altText": "Front view of slightly cropped tank top with compassion and flowers printed with non toxic dyes",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/COMPASSIONBOXYTANK_TRADEWINDS_1.webp?v=1734070249"
-            },
-            "title": "Compassion Boxy Tank",
-            "handle": "compassion-boxy-tank"
-        },
-        {
-            "id": "gid://shopify/Product/9582674477363",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762085118259",
-                "altText": "Cropped Wander Pant in HEATHER PURPLE",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CROPPEDWANDERPANT_HEATHERPURPLE_4146.webp?v=1734069820"
-            },
-            "title": "Cropped Wander Pant",
-            "handle": "cropped-wander-pant"
-        },
-        {
-            "id": "gid://shopify/Product/9582676476211",
-            "image": {
-                "id": "gid://shopify/ProductImage/47762188730675",
-                "altText": "Daily Sweatshirt in Black",
-                "originalSrc": "https://cdn.shopify.com/s/files/1/0915/6725/9955/files/DAILYSWEATSHIRT_BLACKIRIS_1.webp?v=1734070421"
-            },
-            "title": "Daily Sweatshirt",
-            "handle": "daily-sweatshirt"
-        }
-    ],
-    "isDiscountOptional": false,
-    "discountType": "tiered",
-    "discountValue": "",
-    "noDiscount": false,
-    "media": [],
-    "conditions": "[]",
-    "tierBasedOn": "per-item",
-    "purchaseRequirement": "quantity",
-    "tiers": "[{\"id\":1734942590709,\"condition\":\"any\",\"requirement\":\"2\",\"value\":\"20\"},{\"id\":1734942596198,\"condition\":\"any\",\"requirement\":\"3\",\"value\":\"30\"},{\"id\":1734942600485,\"condition\":\"any\",\"requirement\":\"4\",\"value\":\"40\"}]",
-    "productStatus": "active",
-    "createdAt": "2024-12-19T12:08:28.430Z",
-    "updatedAt": "2024-12-23T08:36:32.357Z",
-    "showStepper": true,
-    "userId": "offline_byob-templates.myshopify.com"
-}
+    const resdata = {
+      "id": "cm4va2ln2010lh7yqp0di77sz",
+      "productId": "gid://shopify/Product/9594022134067",
+      "bundleName": "test collection",
+      "bundleDescription": "grtf",
+      "products": [],
+      "isDiscountOptional": false,
+      "discountType": "tiered",
+      "discountValue": "",
+      "noDiscount": false,
+      "media": [],
+      "conditions": "[{\"id\":1734637506417,\"productCondition\":\"any\",\"productConditionNumber\":\"4\",\"productSelectionType\":\"product\",\"selectedProducts\":[{\"id\":\"gid://shopify/Product/9582675231027\",\"title\":\"Carter Top\",\"handle\":\"carter-top\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762140528947\",\"altText\":\"Carter Top in MANGO MOJITO\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CARTERTOP_MANGOMOJITO_4409.webp?v=1734070148\"}},{\"id\":\"gid://shopify/Product/9582675460403\",\"title\":\"Compassion Boxy Tank\",\"handle\":\"compassion-boxy-tank\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762158911795\",\"altText\":\"Front view of slightly cropped tank top with compassion and flowers printed with non toxic dyes\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/COMPASSIONBOXYTANK_TRADEWINDS_1.webp?v=1734070249\"}},{\"id\":\"gid://shopify/Product/9582674477363\",\"title\":\"Cropped Wander Pant\",\"handle\":\"cropped-wander-pant\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762085118259\",\"altText\":\"Cropped Wander Pant in HEATHER PURPLE\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/CROPPEDWANDERPANT_HEATHERPURPLE_4146.webp?v=1734069820\"}},{\"id\":\"gid://shopify/Product/9582676476211\",\"title\":\"Daily Sweatshirt\",\"handle\":\"daily-sweatshirt\",\"image\":{\"id\":\"gid://shopify/ProductImage/47762188730675\",\"altText\":\"Daily Sweatshirt in Black\",\"originalSrc\":\"https://cdn.shopify.com/s/files/1/0915/6725/9955/files/DAILYSWEATSHIRT_BLACKIRIS_1.webp?v=1734070421\"}}],\"selectedCollection\":null,\"chooseEachItemOnce\":false},{\"id\":1735199799480,\"productCondition\":\"any\",\"productConditionNumber\":\"4\",\"productSelectionType\":\"collection\",\"selectedProducts\":[],\"selectedCollection\":{\"id\":\"gid://shopify/Collection/486472515891\",\"title\":\"hello\",\"productsCount\":4},\"chooseEachItemOnce\":false}]",
+      "tierBasedOn": "percentage",
+      "purchaseRequirement": "amount",
+      "tiers": "[{\"id\":1734942590709,\"condition\":\"any\",\"requirement\":\"2\",\"value\":\"20\"},{\"id\":1734942596198,\"condition\":\"any\",\"requirement\":\"3\",\"value\":\"30\"},{\"id\":1734942600485,\"condition\":\"any\",\"requirement\":\"4\",\"value\":\"40\"}]",
+      "productStatus": "active",
+      "createdAt": "2024-12-19T12:08:28.430Z",
+      "updatedAt": "2024-12-26T07:56:59.719Z",
+      "showStepper": true,
+      "userId": "offline_byob-templates.myshopify.com"
+  }
       return resdata;
 }
 
@@ -535,27 +461,183 @@ function formatMoney(cents, format) {
    return formatString.replace(placeholderRegex, value);
 }
 
-async function handleBundleData(products) {
+
+function extractProductDetailsFromBundle(bundles) {
+  try {
+    let allProductItems = [];
+    let allCollectionItems = [];
+    
+    // Handle both array and single object responses
+    const bundleArray = Array.isArray(bundles) ? bundles : [bundles];
+    
+    bundleArray.forEach(bundle => {
+      if (bundle.productSelectionType === "product" && 
+          bundle.selectedProducts && 
+          Array.isArray(bundle.selectedProducts)) {
+        allProductItems = [...allProductItems, ...bundle.selectedProducts];
+      }
+      
+      if (bundle.productSelectionType === "collection" && 
+          bundle.selectedCollection) {
+        allCollectionItems.push(bundle.selectedCollection);
+      }
+    });
+
+    return {
+      // If both types exist, prioritize products
+      type: allProductItems.length > 0 ? 'product' : 'collection',
+      products: allProductItems,
+      collections: allCollectionItems
+    };
+  } catch (error) {
+    console.error('Error extracting details:', error);
+    return {
+      type: 'product',
+      products: [],
+      collections: []
+    };
+  }
+}
+
+
+async function handleBundleData(bundleDetails, conditions) {
   try {
     const mainWrapper = document.querySelector('.main-wrapper');
-    if (!mainWrapper) return;
+    if (!mainWrapper) {
+      console.error('Main wrapper not found');
+      return;
+    }
 
     // Clear existing content
-    mainWrapper.innerHTML += `
-        <div class="individual-products-section">
-          <h3 class="section-title">Select from available products</h3>
-          <div class="individual-products-container">
-            Loading products...
-          </div>
-        </div>
-    `;
+    mainWrapper.innerHTML = '';
 
-    const productData = await fetchProductsDataFromShopify(products);
-      renderProductItems(productData, '.individual-products-container');
+    // Create container for condition links
+    const conditionLinksContainer = document.createElement('div');
+    conditionLinksContainer.className = 'condition-links-container';
+    mainWrapper.appendChild(conditionLinksContainer);
+
+    // Render conditions
+    if (conditions && conditions.length > 0) {
+      const conditionLinks = conditions.map((condition) => `
+        <button class="condition-link" data-condition-id="${condition.id}">
+          Select: ${condition.productSelectionType === 'collection' ? 
+            condition.selectedCollection.title : 'Products'} 
+          (${condition.productConditionNumber} Products)
+        </button>
+      `).join('');
+      conditionLinksContainer.innerHTML = conditionLinks;
+    }
+
+    // Create content container for products and collections
+    const contentContainer = document.createElement('div');
+    contentContainer.className = 'bundle-content-container';
+    mainWrapper.appendChild(contentContainer);
+
+    // Render content in the same order as conditions
+    for (const condition of conditions) {
+      if (condition.productSelectionType === 'product') {
+        // Render individual products section
+        if (condition.selectedProducts && condition.selectedProducts.length > 0) {
+          const productsSection = document.createElement('div');
+          productsSection.className = 'individual-products-section';
+          
+          productsSection.innerHTML = `
+            <h3 class="section-title">Select from available products</h3>
+            <div class="individual-products-container">
+              <div class="loading-indicator">Loading products...</div>
+            </div>
+          `;
+          
+          contentContainer.appendChild(productsSection);
+
+          try {
+            // Get product IDs from selectedProducts
+            const productIds = condition.selectedProducts.map(product => product.id);
+            // Fetch product data using the existing function
+            const productData = await fetchProductsDataFromShopify(bundleDetails.products);
+            const productsContainer = productsSection.querySelector('.individual-products-container');
+            if (productsContainer) {
+              renderProductItems(productData, '.individual-products-container');
+            }
+          } catch (error) {
+            console.error('Error fetching and rendering products:', error);
+            const productsContainer = productsSection.querySelector('.individual-products-container');
+            if (productsContainer) {
+              productsContainer.innerHTML = '<p class="error-message">Error loading products. Please try again.</p>';
+            }
+          }
+        }
+      } else if (condition.productSelectionType === 'collection') {
+        // Render collection section
+        if (condition.selectedCollection) {
+          const collection = condition.selectedCollection;
+          const collectionSection = document.createElement('div');
+          collectionSection.className = 'collection-section';
+          collectionSection.id = `collection-${collection.id.replace('gid://shopify/Collection/', '')}`;
+          
+          collectionSection.innerHTML = `
+            <h3 class="section-title">Select from collection ${collection.title}</h3>
+            <div class="collection-products-container" data-collection-id="${collection.id}">
+              <div class="loading-indicator">Loading collection products...</div>
+            </div>
+          `;
+          
+          contentContainer.appendChild(collectionSection);
+
+          try {
+            await renderCollectionProductsVertical(collection);
+          } catch (error) {
+            console.error('Error rendering collection:', error);
+            const productsContainer = collectionSection.querySelector('.collection-products-container');
+            if (productsContainer) {
+              productsContainer.innerHTML = '<p class="error-message">Error loading collection products. Please try again.</p>';
+            }
+          }
+        }
+      }
+    }
+
+    // Attach scroll handler after all content is rendered
+    attachScrollHandler(conditions);
 
   } catch (error) {
     console.error('Error handling bundle data:', error);
+    if (mainWrapper) {
+      mainWrapper.innerHTML = '<p class="error-message">Error loading bundle data. Please refresh the page and try again.</p>';
+    }
   }
+}
+
+
+function attachScrollHandler(conditions) {
+  const conditionLinks = document.querySelectorAll('.condition-link');
+  
+  conditionLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      const conditionId = this.dataset.conditionId;
+      const condition = conditions.find(c => c.id.toString() === conditionId);
+      
+      if (!condition) return;
+
+      // Handle collection-based conditions
+      if (condition.productSelectionType === 'collection' && condition.selectedCollection) {
+        const collectionId = condition.selectedCollection.id;
+        const cleanId = collectionId.replace('gid://shopify/Collection/', '');
+        const collectionSection = document.querySelector(`#collection-${cleanId}`);
+        
+        if (collectionSection) {
+          collectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } 
+      // Handle product-based conditions
+      else if (condition.productSelectionType === 'product') {
+        const individualProductsSection = document.querySelector('.individual-products-section');
+        if (individualProductsSection) {
+          individualProductsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
 }
 
 function updateMetaData(bundleDetails) {
@@ -646,6 +728,7 @@ async function fetchProductsDataFromShopify(products) {
   }
 }
 
+
 function renderProductItems(productData, containerSelector = '.collection-products-container') {
   try {
     // Store products in window.config object
@@ -704,6 +787,90 @@ function renderProductItems(productData, containerSelector = '.collection-produc
   }
 }
 
+function renderCollectionProductsVertical(collection) {
+  try {
+    const id = collection.id.replace('gid://shopify/Collection/', '');
+    const collectionProducts = window.config.collectionProducts[id] || [];
+    
+    // Add collection products to the main products array if they don't exist
+    collectionProducts.forEach(product => {
+      const formattedProduct = {
+        ...product,
+        id: String(product.id),
+        variants: product.variants || [],
+        options: product.options || [],
+        title: product.title || '',
+        price: product.price || 0,
+        featured_image: product.featured_image || ''
+      };
+      
+      const existingProductIndex = window.config.products.findIndex(p => p.id === formattedProduct.id);
+      if (existingProductIndex === -1) {
+        window.config.products.push(formattedProduct);
+      } else {
+        // Update existing product with collection data
+        window.config.products[existingProductIndex] = {
+          ...window.config.products[existingProductIndex],
+          ...formattedProduct
+        };
+      }
+    });
+
+    const cleanId = collection.id.replace('gid://shopify/Collection/', '');
+    const productsContainer = document.querySelector(`#collection-${cleanId} .collection-products-container`);
+    
+    if (!productsContainer) {
+      console.error(`Container not found for collection: ${collection.title}`);
+      return;
+    }
+    
+    productsContainer.innerHTML = `
+        ${collectionProducts.map(product => `
+          <div class="product-card" data-collection-id="${id}" data-product-id="${parseInt(product.id)}">
+            <div class="product-card-wrapper">
+              <div class="product-card-image">
+                <img
+                  src="${product.featured_image}"
+                  alt="${product.title}"
+                  width="100%"
+                  height="100%"
+                >
+              </div>
+
+              <div class="product-card-content">
+                <div class="product-card-top">
+                  <div class="product-title">
+                    <h4>${product.title}</h4>
+                  </div>
+                </div>
+
+                <div class="product-card-mid">
+                  <div class="product-price">
+                    <p>${formatMoney(product.price, shop_money_format)}</p>
+                  </div>
+                  <div class="product-available-variants">
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="product-card-cta">
+                <div class="add-to-bundle">
+                  <button>Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+    `;
+
+    attachProductEventListeners();
+  } catch (error) {
+    console.error('Error rendering collection products:', error);
+  }
+}
+
 function attachProductEventListeners() {
   // Close button functionality
   const closeButton = document.querySelector('.close-variant-selector button');
@@ -747,6 +914,22 @@ function attachProductEventListeners() {
       // First try to find product in main products array
       let product = window.config.products.find(p => parseInt(p.id) === productId);
       
+      // If not found, check collection products
+      if (!product) {
+        for (const collectionId in window.config.collectionProducts) {
+          const collectionProduct = window.config.collectionProducts[collectionId].find(
+            p => parseInt(p.id) === productId
+          );
+          if (collectionProduct) {
+            product = {
+              ...collectionProduct,
+              id: String(collectionProduct.id),
+              variants: collectionProduct.variants || []
+            };
+            break;
+          }
+        }
+      }
 
       if (!product) {
         console.error('Product not found:', productId);
@@ -910,6 +1093,7 @@ function attachProductEventListeners() {
   }
 }
 
+
 function closeVariantSelector() {
   const variantPopup = document.querySelector('.product-variant-selector');
   if (variantPopup) {
@@ -1072,17 +1256,17 @@ function calculateTieredDiscount(cartItems) {
     const subtotalInCents = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-    console.log('Base Value Calculation:', {
-      tierBasedOn,
-      baseValue,
-      subtotalInCents,
-      totalItems
-    });
+    // console.log('Base Value Calculation:', {
+    //   tierBasedOn,
+    //   baseValue,
+    //   subtotalInCents,
+    //   totalItems
+    // });
 
     const applicableTier = findApplicableTier(baseValue);
     if (!applicableTier) return 0;
 
-    console.log('Applicable Tier:', applicableTier);
+    // console.log('Applicable Tier:', applicableTier);
 
     let discountAmount = 0;
     switch (tierBasedOn) {
@@ -1108,13 +1292,13 @@ function calculateTieredDiscount(cartItems) {
         discountAmount = 0;
     }
 
-    console.log('Discount Calculation Result:', {
-      type: tierBasedOn,
-      value: applicableTier.value,
-      baseValue,
-      subtotalInCents,
-      discountAmount
-    });
+    // console.log('Discount Calculation Result:', {
+    //   type: tierBasedOn,
+    //   value: applicableTier.value,
+    //   baseValue,
+    //   subtotalInCents,
+    //   discountAmount
+    // });
 
     return Math.round(discountAmount);
   } catch (error) {
@@ -1328,7 +1512,7 @@ function isMaxTierReached() {
 }
 
 function updateItemQuantity(variantId, newQuantity) {
-  console.log('UpdateItemQuantity called:', { variantId, newQuantity });
+  // console.log('UpdateItemQuantity called:', { variantId, newQuantity });
   
   if (newQuantity < 1) return;
 
@@ -1339,7 +1523,7 @@ function updateItemQuantity(variantId, newQuantity) {
   }
 
   const item = window.sideCart.items[itemIndex];
-  console.log('Found item:', item);
+  // console.log('Found item:', item);
   
   const oldQuantity = item.quantity;
   item.quantity = newQuantity;
@@ -1685,7 +1869,7 @@ function handleCheckout() {
     quantity: item.quantity
   }));
 
-  console.log(itemsCart)
+  // console.log(itemsCart)
 
   // Create form data with bundle properties
   const formData = {
@@ -1737,19 +1921,17 @@ function handleCheckout() {
 document.addEventListener('DOMContentLoaded', function() {
   const bundleData = fetchProductsFromDatabase();
   updateMetaData(bundleData)
-  handleBundleData(bundleData.products);
+  const bundleDetails = extractProductDetailsFromBundle(JSON.parse(bundleData.conditions));
+  handleBundleData(bundleDetails,JSON.parse(bundleData.conditions));
   populateDiscountCondition(bundleData);
-
+  
   // Add side cart checkout button listener
   const checkoutButton = document.querySelector('.side-cart-checkout-cta button');
   if (checkoutButton) {
     checkoutButton.addEventListener('click', handleCheckout);
   }
+  sideCartRenderer();
 
-  setTimeout(() => {
-    sideCartRenderer();
-  }, 100);
+  
 });
-
-
 </script>
