@@ -651,6 +651,30 @@ h6 {
   font-weight: var(--fw-bold);
 }
 
+.add-to-bundle button:disabled,
+.add-to-bundle button.disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.product-available-variants.disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.quantity-btn.disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.quantity-input[readonly] {
+  opacity: 0.6;
+  background-color: #f5f5f5;
+}
+
 
 .side-cart-header {
   padding: 22px 24px;
